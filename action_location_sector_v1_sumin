@@ -1,0 +1,31 @@
+#C:\Users\aischool\Downloads\generative_agents-main\reverie\backend_server\persona\prompt_template\v1\action_location_sector_v1.txt
+#활동지역 3 / 수정
+
+Variables: 
+!<INPUT 0>! -- Persona name
+!<INPUT 1>! -- Maze all possible sectors
+!<INPUT 2>! -- Persona name
+!<INPUT 3>! -- Persona living sector
+!<INPUT 4>! -- Persona living sector arenas
+!<INPUT 5>! -- Persona name
+!<INPUT 6>! -- Persona current sector
+!<INPUT 7>! -- Persona current sector arenas
+!<INPUT 8>! -- curr action description
+!<INPUT 9>! -- Persona name
+<commentblockmarker>###</commentblockmarker>
+Task -- choose an appropriate area  from the area options for a task at hand. 
+
+Honaldu Son lives in {Honaldu Son's residence} that has Honaldu Son's room, bathroom, kitchen.
+Honaldu Son is currently in {Honaldu Son's residence} that has Honaldu Son's room, bathroom, kitchen. 
+Area options: {Honaldu Son's residence, sweet potato farm, corn farm, barn, wheat farm}.
+* Stay in the current area if the activity can be done there. Only go out if the activity needs to take place in another place.
+* Must be one of the "Area options," verbatim.
+For taking a walk, Honaldu Son should go to the following area: {dokidoki ville}
+---
+
+!<INPUT 0>! lives in {!<INPUT 1>!} that has !<INPUT 2>!.
+!<INPUT 3>! is currently in {!<INPUT 4>!} that has !<INPUT 5>!. !<INPUT 6>!
+Area options: {!<INPUT 7>!}. 
+* Stay in the current area if the activity can be done there. Only go out if the activity needs to take place in another place.
+* Must be one of the "Area options," verbatim.
+!<INPUT 8>! is !<INPUT 9>!. For !<INPUT 10>!, !<INPUT 11>! should go to the following area: {
