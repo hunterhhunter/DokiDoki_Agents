@@ -1,0 +1,17 @@
+{
+    "dokidoki village": {
+      "Tom's Forge": {
+        "Store": [
+          "Shelf"
+        ],
+        "Forge": [
+          "Anvil",
+          "Furnace"
+        ],
+        "Tom's Home":[
+          "bed",
+          "chair"
+        ]
+      }
+    }
+}
