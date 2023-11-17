@@ -6,7 +6,9 @@ class EventChecker():
         self.events = {}
 
     def get_event(self, subject):
-        return self.events[subject]
+        if subject in self.events.keys():
+            return self.events[subject]
+        return (subject, None, None, None)
 
     def add_event(self, curr_event):
         # curr_event = (subject, predicate, object)
@@ -22,4 +24,4 @@ class EventChecker():
 
     def turn_event_to_idle(self, curr_event):
         if curr_event[0] in self.events:
-            self.events[curr_event[0]] = (None, None)
+            self.events[curr_event[0]] = (None, None, None)

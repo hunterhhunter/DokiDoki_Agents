@@ -1,11 +1,453 @@
 import datetime
 import sys
 sys.path.append('../../')
+import math
 
 from persona.prompt_template.run_gpt_prompt import *
 from persona.cognitive_modules.retrieve import *
+from persona.cognitive_modules.converse import *
 
-def generate_action_arena(act_desp, persona, maze, act_world, act_sector): 
+def generate_decide_to_react(init_persona, target_persona, retrieved): 
+  # if debug: print ("GNS FUNCTION: <generate_decide_to_react>")
+  return run_gpt_prompt_decide_to_react(init_persona, target_persona, retrieved)[0]
+
+
+def generate_new_decomp_schedule(persona, inserted_act, inserted_act_dur,  start_hour, end_hour): 
+  # Step 1: Setting up the core variables for the function. 
+  # <p> is the persona whose schedule we are editing right now. 
+  p = persona
+  # <today_min_pass> indicates the number of minutes that have passed today. 
+  today_min_pass = (int(p.scratch.curr_time.hour) * 60 
+                    + int(p.scratch.curr_time.minute) + 1)
+  
+  # Step 2: We need to create <main_act_dur> and <truncated_act_dur>. 
+  # These are basically a sub-component of <f_daily_schedule> of the persona,
+  # but focusing on the current decomposition. 
+  # Here is an example for <main_act_dur>: 
+  # ['wakes up and completes her morning routine (wakes up at 6am)', 5]
+  # ['wakes up and completes her morning routine (wakes up at 6am)', 5]
+  # ['wakes up and completes her morning routine (uses the restroom)', 5]
+  # ['wakes up and completes her morning routine (washes her ...)', 10]
+  # ['wakes up and completes her morning routine (makes her bed)', 5]
+  # ['wakes up and completes her morning routine (eats breakfast)', 15]
+  # ['wakes up and completes her morning routine (gets dressed)', 10]
+  # ['wakes up and completes her morning routine (leaves her ...)', 5]
+  # ['wakes up and completes her morning routine (starts her ...)', 5]
+  # ['preparing for her day (waking up at 6am)', 5]
+  # ['preparing for her day (making her bed)', 5]
+  # ['preparing for her day (taking a shower)', 15]
+  # ['preparing for her day (getting dressed)', 5]
+  # ['preparing for her day (eating breakfast)', 10]
+  # ['preparing for her day (brushing her teeth)', 5]
+  # ['preparing for her day (making coffee)', 5]
+  # ['preparing for her day (checking her email)', 5]
+  # ['preparing for her day (starting to work on her painting)', 5]
+  # 
+  # And <truncated_act_dur> concerns only until where an event happens. 
+  # ['wakes up and completes her morning routine (wakes up at 6am)', 5]
+  # ['wakes up and completes her morning routine (wakes up at 6am)', 2]
+  main_act_dur = []
+  truncated_act_dur = []
+  dur_sum = 0 # duration sum
+  count = 0 # enumerate count
+  truncated_fin = False 
+
+  print ("DEBUG::: ", persona.scratch.name)
+  for act, dur in p.scratch.f_daily_schedule: 
+    if (dur_sum >= start_hour * 60) and (dur_sum < end_hour * 60): 
+      main_act_dur += [[act, dur]]
+      if dur_sum <= today_min_pass:
+        truncated_act_dur += [[act, dur]]
+      elif dur_sum > today_min_pass and not truncated_fin: 
+        # We need to insert that last act, duration list like this one: 
+        # e.g., ['wakes up and completes her morning routine (wakes up...)', 2]
+        truncated_act_dur += [[p.scratch.f_daily_schedule[count][0], 
+                               dur_sum - today_min_pass]] 
+        truncated_act_dur[-1][-1] -= (dur_sum - today_min_pass) ######## DEC 7 DEBUG;.. is the +1 the right thing to do??? 
+        # truncated_act_dur[-1][-1] -= (dur_sum - today_min_pass + 1) ######## DEC 7 DEBUG;.. is the +1 the right thing to do??? 
+        print ("DEBUG::: ", truncated_act_dur)
+
+        # truncated_act_dur[-1][-1] -= (dur_sum - today_min_pass) ######## DEC 7 DEBUG;.. is the +1 the right thing to do??? 
+        truncated_fin = True
+    dur_sum += dur
+    count += 1
+
+  persona_name = persona.name 
+  main_act_dur = main_act_dur
+
+  x = truncated_act_dur[-1][0].split("(")[0].strip() + " (on the way to " + truncated_act_dur[-1][0].split("(")[-1][:-1] + ")"
+  truncated_act_dur[-1][0] = x 
+
+  if "(" in truncated_act_dur[-1][0]: 
+    inserted_act = truncated_act_dur[-1][0].split("(")[0].strip() + " (" + inserted_act + ")"
+
+  # To do inserted_act_dur+1 below is an important decision but I'm not sure
+  # if I understand the full extent of its implications. Might want to 
+  # revisit. 
+  truncated_act_dur += [[inserted_act, inserted_act_dur]]
+  start_time_hour = (datetime.datetime(2022, 10, 31, 0, 0) 
+                   + datetime.timedelta(hours=start_hour))
+  end_time_hour = (datetime.datetime(2022, 10, 31, 0, 0) 
+                   + datetime.timedelta(hours=end_hour))
+
+  # if debug: print ("GNS FUNCTION: <generate_new_decomp_schedule>")
+  return run_gpt_prompt_new_decomp_schedule(persona, 
+                                            main_act_dur, 
+                                            truncated_act_dur, 
+                                            start_time_hour,
+                                            end_time_hour,
+                                            inserted_act,
+                                            inserted_act_dur)[0]
+
+def generate_convo(location, init_persona, target_persona): 
+  # curr_loc = maze.access_tile(init_persona.scratch.curr_tile)
+
+  # convo = run_gpt_prompt_create_conversation(init_persona, target_persona, curr_loc)[0]
+  # convo = agent_chat_v1(maze, init_persona, target_persona)
+  convo = agent_chat_v2(location, init_persona, target_persona)
+  all_utt = ""
+
+  for row in convo: 
+    speaker = row[0]
+    utt = row[1]
+    all_utt += f"{speaker}: {utt}\n"
+
+  convo_length = math.ceil(int(len(all_utt)/8) / 30)
+
+  # if debug: print ("GNS FUNCTION: <generate_convo>")
+  return convo, convo_length
+
+
+def generate_convo_summary(persona, convo): 
+  convo_summary = run_gpt_prompt_summarize_conversation(persona, convo)[0]
+  return convo_summary
+
+def _create_react(persona, inserted_act, inserted_act_dur,
+                  act_address, act_event, chatting_with, chat, chatting_with_buffer,
+                  chatting_end_time, 
+                  act_pronunciatio, act_obj_description, act_obj_pronunciatio, 
+                  act_obj_event, act_start_time=None): 
+  p = persona 
+
+  min_sum = 0
+  for i in range (p.scratch.get_f_daily_schedule_hourly_org_index()): 
+    min_sum += p.scratch.f_daily_schedule_hourly_org[i][1]
+  start_hour = int (min_sum/60)
+
+  if (p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()][1] >= 120):
+    end_hour = start_hour + p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()][1]/60
+
+  elif (p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()][1] + 
+      p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()+1][1]): 
+    end_hour = start_hour + ((p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()][1] + 
+              p.scratch.f_daily_schedule_hourly_org[p.scratch.get_f_daily_schedule_hourly_org_index()+1][1])/60)
+
+  else: 
+    end_hour = start_hour + 2
+  end_hour = int(end_hour)
+
+  dur_sum = 0
+  count = 0 
+  start_index = None
+  end_index = None
+  for act, dur in p.scratch.f_daily_schedule: 
+    if dur_sum >= start_hour * 60 and start_index == None:
+      start_index = count
+    if dur_sum >= end_hour * 60 and end_index == None: 
+      end_index = count
+    dur_sum += dur
+    count += 1
+
+  ret = generate_new_decomp_schedule(p, inserted_act, inserted_act_dur, 
+                                       start_hour, end_hour)
+  p.scratch.f_daily_schedule[start_index:end_index] = ret
+  p.scratch.add_new_action(act_address,
+                           inserted_act_dur,
+                           inserted_act,
+                           act_pronunciatio,
+                           act_event,
+                           chatting_with,
+                           chat,
+                           chatting_with_buffer,
+                           chatting_end_time,
+                           act_obj_description,
+                           act_obj_pronunciatio,
+                           act_obj_event,
+                           act_start_time)
+  
+def _chat_react(location, persona, focused_event, reaction_mode, personas):
+  # There are two personas -- the persona who is initiating the conversation
+  # and the persona who is the target. We get the persona instances here. 
+  init_persona = persona
+  target_persona = personas[reaction_mode[9:].strip()]
+  curr_personas = [init_persona, target_persona]
+
+  # Actually creating the conversation here. 
+  convo, duration_min = generate_convo(location, init_persona, target_persona)
+  convo_summary = generate_convo_summary(init_persona, convo)
+  inserted_act = convo_summary
+  inserted_act_dur = duration_min
+
+  act_start_time = target_persona.scratch.act_start_time
+
+  curr_time = target_persona.scratch.curr_time
+  if curr_time.second != 0: 
+    temp_curr_time = curr_time + datetime.timedelta(seconds=60 - curr_time.second)
+    chatting_end_time = temp_curr_time + datetime.timedelta(minutes=inserted_act_dur)
+  else: 
+    chatting_end_time = curr_time + datetime.timedelta(minutes=inserted_act_dur)
+
+  for role, p in [("init", init_persona), ("target", target_persona)]: 
+    if role == "init": 
+      act_address = f"<persona> {target_persona.name}"
+      act_event = (p.name, "chat with", target_persona.name)
+      chatting_with = target_persona.name
+      chatting_with_buffer = {}
+      chatting_with_buffer[target_persona.name] = 800
+    elif role == "target": 
+      act_address = f"<persona> {init_persona.name}"
+      act_event = (p.name, "chat with", init_persona.name)
+      chatting_with = init_persona.name
+      chatting_with_buffer = {}
+      chatting_with_buffer[init_persona.name] = 800
+
+    act_pronunciatio = "💬" 
+    act_obj_description = None
+    act_obj_pronunciatio = None
+    act_obj_event = (None, None, None)
+
+    _create_react(p, inserted_act, inserted_act_dur,
+      act_address, act_event, chatting_with, convo, chatting_with_buffer, chatting_end_time,
+      act_pronunciatio, act_obj_description, act_obj_pronunciatio, 
+      act_obj_event, act_start_time)
+
+
+def _wait_react(persona, reaction_mode): 
+  p = persona
+
+  inserted_act = f'waiting to start {p.scratch.act_description.split("(")[-1][:-1]}'
+  end_time = datetime.datetime.strptime(reaction_mode[6:].strip(), "%B %d, %Y, %H:%M:%S")
+  inserted_act_dur = (end_time.minute + end_time.hour * 60) - (p.scratch.curr_time.minute + p.scratch.curr_time.hour * 60) + 1
+
+  act_address = f"<waiting> {p.scratch.curr_tile[0]} {p.scratch.curr_tile[1]}"
+  act_event = (p.name, "waiting to start", p.scratch.act_description.split("(")[-1][:-1])
+  chatting_with = None
+  chat = None
+  chatting_with_buffer = None
+  chatting_end_time = None
+
+  act_pronunciatio = "⌛" 
+  act_obj_description = None
+  act_obj_pronunciatio = None
+  act_obj_event = (None, None, None)
+
+  _create_react(p, inserted_act, inserted_act_dur,
+    act_address, act_event, chatting_with, chat, chatting_with_buffer, chatting_end_time,
+    act_pronunciatio, act_obj_description, act_obj_pronunciatio, act_obj_event)
+  
+def generate_decide_to_talk(init_persona, target_persona, retrieved): 
+  x =run_gpt_prompt_decide_to_talk(init_persona, target_persona, retrieved)[0]
+  # if debug: print ("GNS FUNCTION: <generate_decide_to_talk>")
+
+  if x == "yes": 
+    return True
+  else: 
+    return False
+  
+def _should_react(persona, retrieved, personas): 
+  """
+  Determines what form of reaction the persona should exihibit given the 
+  retrieved values. 
+  INPUT
+    persona: Current <Persona> instance whose action we are determining. 
+    retrieved: A dictionary of <ConceptNode> that were retrieved from the 
+               the persona's associative memory. This dictionary takes the
+               following form: 
+               dictionary[event.description] = 
+                 {["curr_event"] = <ConceptNode>, 
+                  ["events"] = [<ConceptNode>, ...], 
+                  ["thoughts"] = [<ConceptNode>, ...] }
+    personas: A dictionary that contains all persona names as keys, and the 
+              <Persona> instance as values. 
+  """
+  def lets_talk(init_persona, target_persona, retrieved):
+    if (not target_persona.scratch.act_address 
+        or not target_persona.scratch.act_description
+        or not init_persona.scratch.act_address
+        or not init_persona.scratch.act_description): 
+      return False
+
+    if ("sleeping" in target_persona.scratch.act_description 
+        or "sleeping" in init_persona.scratch.act_description): 
+      return False
+
+    if init_persona.scratch.curr_time.hour == 23: 
+      return False
+
+    if "<waiting>" in target_persona.scratch.act_address: 
+      return False
+
+    if (target_persona.scratch.chatting_with 
+      or init_persona.scratch.chatting_with): 
+      return False
+
+    if (target_persona.name in init_persona.scratch.chatting_with_buffer): 
+      if init_persona.scratch.chatting_with_buffer[target_persona.name] > 0: 
+        return False
+
+    if generate_decide_to_talk(init_persona, target_persona, retrieved): 
+
+      return True
+
+    return False
+
+  def lets_react(init_persona, target_persona, retrieved): 
+    if (not target_persona.scratch.act_address 
+        or not target_persona.scratch.act_description
+        or not init_persona.scratch.act_address
+        or not init_persona.scratch.act_description): 
+      return False
+
+    if ("sleeping" in target_persona.scratch.act_description 
+        or "sleeping" in init_persona.scratch.act_description): 
+      return False
+
+    # return False
+    if init_persona.scratch.curr_time.hour == 23: 
+      return False
+
+    if "waiting" in target_persona.scratch.act_description: 
+      return False
+    if init_persona.scratch.planned_path == []:
+      return False
+
+    if (init_persona.scratch.act_address 
+        != target_persona.scratch.act_address): 
+      return False
+
+    react_mode = generate_decide_to_react(init_persona, 
+                                          target_persona, retrieved)
+
+    if react_mode == "1": 
+      wait_until = ((target_persona.scratch.act_start_time 
+        + datetime.timedelta(minutes=target_persona.scratch.act_duration - 1))
+        .strftime("%B %d, %Y, %H:%M:%S"))
+      return f"wait: {wait_until}"
+    elif react_mode == "2":
+      return False
+      return "do other things"
+    else:
+      return False #"keep" 
+
+  # If the persona is chatting right now, default to no reaction 
+  if persona.scratch.chatting_with: 
+    return False
+  if "<waiting>" in persona.scratch.act_address: 
+    return False
+
+  # Recall that retrieved takes the following form: 
+  # dictionary {["curr_event"] = <ConceptNode>, 
+  #             ["events"] = [<ConceptNode>, ...], 
+  #             ["thoughts"] = [<ConceptNode>, ...]}
+  curr_event = retrieved["curr_event"]
+
+  if ":" not in curr_event.subject: 
+    # this is a persona event. 
+    if lets_talk(persona, personas[curr_event.subject], retrieved):
+      return f"chat with {curr_event.subject}"
+    react_mode = lets_react(persona, personas[curr_event.subject], 
+                            retrieved)
+    return react_mode
+  return False
+
+def _choose_retrieved(persona, retrieved): 
+  """
+  Retrieved elements have multiple core "curr_events". We need to choose one
+  event to which we are going to react to. We pick that event here. 
+  INPUT
+    persona: Current <Persona> instance whose action we are determining. 
+    retrieved: A dictionary of <ConceptNode> that were retrieved from the 
+               the persona's associative memory. This dictionary takes the
+               following form: 
+               dictionary[event.description] = 
+                 {["curr_event"] = <ConceptNode>, 
+                  ["events"] = [<ConceptNode>, ...], 
+                  ["thoughts"] = [<ConceptNode>, ...] }
+  """
+  # Once we are done with the reflection, we might want to build a more  
+  # complex structure here.
+  
+  # We do not want to take self events... for now 
+  copy_retrieved = retrieved.copy()
+  for event_desc, rel_ctx in copy_retrieved.items(): 
+    curr_event = rel_ctx["curr_event"]
+    if curr_event.subject == persona.name: 
+      del retrieved[event_desc]
+
+  # Always choose persona first.
+  priority = []
+  for event_desc, rel_ctx in retrieved.items(): 
+    curr_event = rel_ctx["curr_event"]
+    if (":" not in curr_event.subject 
+        and curr_event.subject != persona.name): 
+      priority += [rel_ctx]
+  if priority: 
+    return random.choice(priority)
+
+  # Skip idle. 
+  for event_desc, rel_ctx in retrieved.items(): 
+    curr_event = rel_ctx["curr_event"]
+    if "is idle" not in event_desc: 
+      priority += [rel_ctx]
+  if priority: 
+    return random.choice(priority)
+  return None
+
+def generate_act_obj_desc(act_game_object, act_desp, persona): 
+  # if debug: print ("GNS FUNCTION: <generate_act_obj_desc>")
+  return run_gpt_prompt_act_obj_desc(act_game_object, act_desp, persona)[0]
+
+def generate_act_obj_event_triple(act_game_object, act_obj_desc, persona): 
+  # if debug: print ("GNS FUNCTION: <generate_act_obj_event_triple>")
+  return run_gpt_prompt_act_obj_event_triple(act_game_object, act_obj_desc, persona)[0]
+  
+def generate_action_event_triple(act_desp, persona): 
+  """TODO 
+
+  INPUT: 
+    act_desp: the description of the action (e.g., "sleeping")
+    persona: The Persona class instance
+  OUTPUT: 
+    a string of emoji that translates action description.
+  EXAMPLE OUTPUT: 
+    "🧈🍞"
+  """
+  # if debug: print ("GNS FUNCTION: <generate_action_event_triple>")
+  return run_gpt_prompt_event_triple(act_desp, persona)[0]
+
+def generate_action_game_object(act_desp, act_address, persona, location):
+  """TODO
+  Given the action description and the act address (the address where
+  we expect the action to task place), choose one of the game objects. 
+
+  Persona state: identity stable set, n-1 day schedule, daily plan
+
+  INPUT: 
+    act_desp: the description of the action (e.g., "sleeping")
+    act_address: the arena where the action will take place: 
+               (e.g., "dolores double studio:double studio:bedroom 2")
+    persona: The Persona class instance 
+  OUTPUT: 
+    act_game_object: 
+  EXAMPLE OUTPUT: 
+    "bed"
+  """
+  # if debug: print ("GNS FUNCTION: <generate_action_game_object>")
+  if not persona.s_mem.get_str_accessible_arena_game_objects(act_address): 
+    return "<random>"
+  return run_gpt_prompt_action_game_object(act_desp, persona, location, act_address)[0]
+
+def generate_action_arena(act_desp, persona, location, act_world, act_sector): 
   """TODO 
   Given the persona and the task description, choose the action_arena. 
 
@@ -20,9 +462,9 @@ def generate_action_arena(act_desp, persona, maze, act_world, act_sector):
     "bedroom 2"
   """
   # if debug: print ("GNS FUNCTION: <generate_action_arena>")
-  return run_gpt_prompt_action_arena(act_desp, persona, maze, act_world, act_sector)[0]
+  return run_gpt_prompt_action_arena(act_desp, persona, location, act_world, act_sector)[0]
 
-def generate_action_sector(act_desp, persona, maze): 
+def generate_action_sector(act_desp, persona, location): 
   """TODO 
   Given the persona and the task description, choose the action_sector. 
 
@@ -37,7 +479,7 @@ def generate_action_sector(act_desp, persona, maze):
     "bedroom 2"
   """
   # if debug: print ("GNS FUNCTION: <generate_action_sector>")
-  return run_gpt_prompt_action_sector(act_desp, persona, maze)[0]
+  return run_gpt_prompt_action_sector(act_desp, persona, location)[0]
 
 def generate_task_decomp(persona, task, duration): 
   """
@@ -64,140 +506,6 @@ def generate_task_decomp(persona, task, duration):
   # if debug: print ("GNS FUNCTION: <generate_task_decomp>")
   return run_gpt_prompt_task_decomp(persona, task, duration)[0]
 
-def determine_action(persona, maze): 
-  """
-  Creates the next action sequence for the persona. 
-  The main goal of this function is to run "add_new_action" on the persona's 
-  scratch space, which sets up all the action related variables for the next 
-  action. 
-  As a part of this, the persona may need to decompose its hourly schedule as 
-  needed.   
-  INPUT
-    persona: Current <Persona> instance whose action we are determining. 
-    maze: Current <Maze> instance. 
-  """
-  def determine_decomp(act_desp, act_dura):
-    """
-    Given an action description and its duration, we determine whether we need
-    to decompose it. If the action is about the agent sleeping, we generally
-    do not want to decompose it, so that's what we catch here. 
-
-    INPUT: 
-      act_desp: the description of the action (e.g., "sleeping")
-      act_dura: the duration of the action in minutes. 
-    OUTPUT: 
-      a boolean. True if we need to decompose, False otherwise. 
-    """
-    if "sleep" not in act_desp and "bed" not in act_desp: 
-      return True
-    elif "sleeping" in act_desp or "asleep" in act_desp or "in bed" in act_desp:
-      return False
-    elif "sleep" in act_desp or "bed" in act_desp: 
-      if act_dura > 60: 
-        return False
-    return True
-
-  # The goal of this function is to get us the action associated with 
-  # <curr_index>. As a part of this, we may need to decompose some large 
-  # chunk actions. 
-  # Importantly, we try to decompose at least two hours worth of schedule at
-  # any given point. 
-  curr_index = persona.scratch.get_f_daily_schedule_index()
-  curr_index_60 = persona.scratch.get_f_daily_schedule_index(advance=60)
-
-  # * Decompose * 
-  # During the first hour of the day, we need to decompose two hours 
-  # sequence. We do that here. 
-  if curr_index == 0:
-    # This portion is invoked if it is the first hour of the day. 
-    act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index]
-    if act_dura >= 60: 
-      # We decompose if the next action is longer than an hour, and fits the
-      # criteria described in determine_decomp.
-      if determine_decomp(act_desp, act_dura): 
-        persona.scratch.f_daily_schedule[curr_index:curr_index+1] = (
-                            generate_task_decomp(persona, act_desp, act_dura))
-    if curr_index_60 + 1 < len(persona.scratch.f_daily_schedule):
-      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60+1]
-      if act_dura >= 60: 
-        if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60+1:curr_index_60+2] = (
-                            generate_task_decomp(persona, act_desp, act_dura))
-
-  if curr_index_60 < len(persona.scratch.f_daily_schedule):
-    # If it is not the first hour of the day, this is always invoked (it is
-    # also invoked during the first hour of the day -- to double up so we can
-    # decompose two hours in one go). Of course, we need to have something to
-    # decompose as well, so we check for that too. 
-    if persona.scratch.curr_time.hour < 23:
-      # And we don't want to decompose after 11 pm. 
-      act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index_60]
-      if act_dura >= 60: 
-        if determine_decomp(act_desp, act_dura): 
-          persona.scratch.f_daily_schedule[curr_index_60:curr_index_60+1] = (
-                              generate_task_decomp(persona, act_desp, act_dura))
-  # * End of Decompose * 
-
-  # Generate an <Action> instance from the action description and duration. By
-  # this point, we assume that all the relevant actions are decomposed and 
-  # ready in f_daily_schedule. 
-  print ("DEBUG LJSDLFSKJF")
-  for i in persona.scratch.f_daily_schedule: print (i)
-  print (curr_index)
-  print (len(persona.scratch.f_daily_schedule))
-  print (persona.scratch.name)
-  print ("------")
-
-  # 1440
-  x_emergency = 0
-  for i in persona.scratch.f_daily_schedule: 
-    x_emergency += i[1]
-  # print ("x_emergency", x_emergency)
-
-  if 1440 - x_emergency > 0: 
-    print ("x_emergency__AAA", x_emergency)
-  persona.scratch.f_daily_schedule += [["sleeping", 1440 - x_emergency]]
-  
-
-
-
-  act_desp, act_dura = persona.scratch.f_daily_schedule[curr_index] 
-
-
-
-  # Finding the target location of the action and creating action-related
-  # variables.
-
-  # act_world = maze.access_tile(persona.scratch.curr_tile)["world"]
-  # # act_sector = maze.access_tile(persona.scratch.curr_tile)["sector"]
-  # act_sector = generate_action_sector(act_desp, persona, maze)
-  # act_arena = generate_action_arena(act_desp, persona, maze, act_world, act_sector)
-  # act_address = f"{act_world}:{act_sector}:{act_arena}"
-  # act_game_object = generate_action_game_object(act_desp, act_address,
-  #                                               persona, maze)
-  # new_address = f"{act_world}:{act_sector}:{act_arena}:{act_game_object}"
-  # act_pron = generate_action_pronunciatio(act_desp, persona)
-  # act_event = generate_action_event_triple(act_desp, persona)
-  # # Persona's actions also influence the object states. We set those up here. 
-  # act_obj_desp = generate_act_obj_desc(act_game_object, act_desp, persona)
-  # act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
-  # act_obj_event = generate_act_obj_event_triple(act_game_object, 
-  #                                               act_obj_desp, persona)
-
-  # # Adding the action to persona's queue. 
-  # persona.scratch.add_new_action(new_address, 
-  #                                int(act_dura), 
-  #                                act_desp, 
-  #                                act_pron, 
-  #                                act_event,
-  #                                None,
-  #                                None,
-  #                                None,
-  #                                None,
-  #                                act_obj_desp, 
-  #                                act_obj_pron, 
-  #                                act_obj_event)
-  
 def _long_term_planning(persona, new_day): 
   """
   Formulates the persona's daily long-term plan if it is the start of a new 
@@ -209,8 +517,13 @@ def _long_term_planning(persona, new_day):
              create the personas' long term planning on the new day. 
   """
   # We start by creating the wake up hour for the persona. 
+  '''
+  test
+  # input : "Name: Maria Lopez\nAge: 21\nInnate traits: energetic, enthusiastic, inquisitive\nLearned traits: Maria Lopez is a student at Oak Hill College studying physics and a part time Twitch game streamer who loves to connect with people and explore new ideas.\nCurrently: Maria Lopez is working on her physics degree and streaming games on Twitch to make some extra money. She visits Hobbs Cafe for studying and eating just about everyday.\nLifestyle: Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nDaily plan requirement: Maria Lopez spends at least 3 hours a day Twitch streaming or gaming.\nCurrent Date: Monday February 13\n\n\nIn general, Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nMaria's wake up hour:"
+  # output : 9
+  '''
   wake_up_hour = generate_wake_up_hour(persona)
-
+  # wake_up_hour = 9
   # When it is a new day, we start by creating the daily_req of the persona.
   # Note that the daily_req is a list of strings that describe the persona's
   # day in broad strokes.
@@ -219,8 +532,39 @@ def _long_term_planning(persona, new_day):
     # if this is the start of generation (so there is no previous day's 
     # daily requirement, or if we are on a new day, we want to create a new
     # set of daily requirements.
+    
+    '''
+input : "Name: Maria Lopez\nAge: 21\nInnate traits: energetic, enthusiastic, inquisitive\nLearned traits: Maria Lopez is a student at Oak Hill College studying physics and a part time Twitch game streamer who loves to connect with people and explore new ideas.\nCurrently: Maria Lopez is working on her physics degree and streaming games on Twitch to make some extra money. She visits Hobbs Cafe for studying and eating just about everyday.\nLifestyle: Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nDaily plan requirement: Maria Lopez spends at least 3 hours a day Twitch streaming or gaming.\nCurrent Date: Monday February 13\n\n\nIn general, Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nToday is Monday February 13. Here is Maria's plan today in broad-strokes (with the time of the day. e.g., have a lunch at 12:00 pm, watch TV from 7 to 8 pm): 1) wake up and complete the morning routine at 9:00 am, 2)"
+ouput :    
+0:
+'wake up and complete the morning routine at 9:00 am'
+1:
+'start studying physics at 10:00 am'
+2:
+'have a lunch at 12:00 pm'
+3:
+'continue working on her physics assignments at 1:00 pm'
+4:
+'take a break for snack at 3:00 pm'
+5:
+'stream games on Twitch from 4:00 pm to 7:00 pm'
+6:
+'watch TV from 7 to 8 pm'
+7:
+'complete her physics assignments at 9:00 pm'
+    '''
     persona.scratch.daily_req = generate_first_daily_plan(persona, 
                                                           wake_up_hour)
+    # persona.scratch.daily_req = [
+    #   'wake up and complete the morning routine at 9:00 am', 
+    #   'start studying physics at 10:00 am',
+    #   'have a lunch at 12:00 pm',
+    #   'continue working on her physics assignments at 1:00 pm',
+    #   'take a break for snack at 3:00 pm',
+    #   'stream games on Twitch from 4:00 pm to 7:00 pm',
+    #   'watch TV from 7 to 8 pm',
+    #   'complete her physics assignments at 9:00 pm',
+    #                              ]
   elif new_day == "New day":
     revise_identity(persona)
 
@@ -380,6 +724,60 @@ def generate_hourly_schedule(persona, wake_up_hour):
               "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", 
               "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM",
               "08:00 PM", "09:00 PM", "10:00 PM", "11:00 PM"]
+  '''
+  test
+  input : "Hourly schedule format: \n[Monday February 13 -- 00:00 AM] Activity: [Fill in]\n[Monday February 13 -- 01:00 AM] Activity: [Fill in]\n[Monday February 13 -- 02:00 AM] Activity: [Fill in]\n[Monday February 13 -- 03:00 AM] Activity: [Fill in]\n[Monday February 13 -- 04:00 AM] Activity: [Fill in]\n[Monday February 13 -- 05:00 AM] Activity: [Fill in]\n[Monday February 13 -- 06:00 AM] Activity: [Fill in]\n[Monday February 13 -- 07:00 AM] Activity: [Fill in]\n[Monday February 13 -- 08:00 AM] Activity: [Fill in]\n[Monday February 13 -- 09:00 AM] Activity: [Fill in]\n[Monday February 13 -- 10:00 AM] Activity: [Fill in]\n[Monday February 13 -- 11:00 AM] Activity: [Fill in]\n[Monday February 13 -- 12:00 PM] Activity: [Fill in]\n[Monday February 13 -- 01:00 PM] Activity: [Fill in]\n[Monday February 13 -- 02:00 PM] Activity: [Fill in]\n[Monday February 13 -- 03:00 PM] Activity: [Fill in]\n[Monday February 13 -- 04:00 PM] Activity: [Fill in]\n[Monday February 13 -- 05:00 PM] Activity: [Fill in]\n[Monday February 13 -- 06:00 PM] Activity: [Fill in]\n[Monday February 13 -- 07:00 PM] Activity: [Fill in]\n[Monday February 13 -- 08:00 PM] Activity: [Fill in]\n[Monday February 13 -- 09:00 PM] Activity: [Fill in]\n[Monday February 13 -- 10:00 PM] Activity: [Fill in]\n[Monday February 13 -- 11:00 PM] Activity: [Fill in]\n===\nName: Maria Lopez\nAge: 21\nInnate traits: energetic, enthusiastic, inquisitive\nLearned traits: Maria Lopez is a student at Oak Hill College studying physics and a part time Twitch game streamer who loves to connect with people and explore new ideas.\nCurrently: Maria Lopez is working on her physics degree and streaming games on Twitch to make some extra money. She visits Hobbs Cafe for studying and eating just about everyday.\nLifestyle: Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nDaily plan requirement: Maria Lopez spends at least 3 hours a day Twitch streaming or gaming.\nCurrent Date: Monday February 13\n\n\n[(ID:Q1c1wR) Monday February 13 -- 00:00 AM] Activity: Maria is sleeping\n[(ID:p8vlWE) Monday February 13 -- 01:00 AM] Activity: Maria is sleeping\n[(ID:Q298Aa) Monday February 13 -- 02:00 AM] Activity: Maria is sleeping\n[(ID:Tqn9EP) Monday February 13 -- 03:00 AM] Activity: Maria is sleeping\n[(ID:i3slbH) Monday February 13 -- 04:00 AM] Activity: Maria is sleeping\n[(ID:P1EdE5) Monday February 13 -- 05:00 AM] Activity: Maria is sleeping\n[(ID:3d9QIK) Monday February 13 -- 06:00 AM] Activity: Maria is sleeping\n[(ID:V7twUv) Monday February 13 -- 07:00 AM] Activity: Maria is sleeping\n[(ID:kv5rWK) Monday February 13 -- 08:00 AM] Activity: Maria is sleeping\n[(ID:CF6twS) Monday February 13 -- 09:00 AM] Activity: Maria is waking up and completing her morning routine\n[(ID:pXegbL) Monday February 13 -- 10:00 AM] Activity: Maria is studying physics\n\n\nHere the originally intended hourly breakdown of Maria's schedule today: 1) wake up and complete the morning routine at 9:00 am, 2) start studying physics at 10:00 am, 3) have a lunch at 12:00 pm, 4) continue working on her physics assignments at 1:00 pm, 5) take a break for snack at 3:00 pm, 6) stream games on Twitch from 4:00 pm to 7:00 pm, 7) watch TV from 7 to 8 pm, 8) complete her physics assignments at 9:00 pm\n[(ID:rCYF2N) Monday February 13 -- 11:00 AM] Activity: Maria is"
+  output :
+  
+00:
+'sleeping'
+01:
+'sleeping'
+02:
+'sleeping'
+03:
+'sleeping'
+04:
+'sleeping'
+05:
+'sleeping'
+06:
+'sleeping'
+07:
+'sleeping'
+08:
+'sleeping'
+09:
+'waking up and completing her morning routine'
+10:
+'studying physics'
+11:
+'studying physics'
+12:
+'having lunch'
+13:
+'studying physics'
+14:
+'studying physics'
+15:
+'taking a break for snack'
+16:
+'streaming games on Twitch'
+17:
+'streaming games on Twitch'
+18:
+'watching TV'
+19:
+'watching TV'
+20:
+'completing her physics assignments'
+21:
+'completing her physics assignments'
+22:
+'sleeping'
+23:
+'sleeping'
+  '''
   n_m1_activity = []
   diversity_repeat_count = 3
   for i in range(diversity_repeat_count): 
@@ -393,7 +791,32 @@ def generate_hourly_schedule(persona, wake_up_hour):
         else: 
           n_m1_activity += [run_gpt_prompt_generate_hourly_schedule(
                           persona, curr_hour_str, n_m1_activity, hour_str)[0]]
-  
+#   n_m1_activity = [
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'sleeping',
+# 'waking up and completing her morning routine',
+# 'studying physics',
+# 'studying physics',
+# 'having lunch',
+# 'studying physics',
+# 'studying physics',
+# 'taking a break for snack',
+# 'streaming games on Twitch',
+# 'streaming games on Twitch',
+# 'watching TV',
+# 'watching TV',
+# 'completing her physics assignments',
+# 'completing her physics assignments',
+# 'sleeping',
+# 'sleeping',
+#   ]
   # Step 1. Compressing the hourly schedule to the following format: 
   # The integer indicates the number of hours. They should add up to 24. 
   # [['sleeping', 6], ['waking up and starting her morning routine', 1], 
@@ -423,7 +846,7 @@ def generate_hourly_schedule(persona, wake_up_hour):
 
   return n_m1_hourly_compressed
 
-def _determine_action(persona, maze): 
+def _determine_action(persona, location): 
   """
   Creates the next action sequence for the persona. 
   The main goal of this function is to run "add_new_action" on the persona's 
@@ -526,37 +949,93 @@ def _determine_action(persona, maze):
 
   # Finding the target location of the action and creating action-related
   # variables.
-  act_world = maze.access_tile(persona.scratch.curr_tile)["world"]
+  act_world = location["world"]
   # act_sector = maze.access_tile(persona.scratch.curr_tile)["sector"]
-  act_sector = generate_action_sector(act_desp, persona, maze)
-  act_arena = generate_action_arena(act_desp, persona, maze, act_world, act_sector)
+  '''
+input
+"Jane Anderson is in kitchen in Jane Anderson's house.\nJane Anderson is going to Jane Anderson's house that has the following areas: {kitchen,  bedroom, bathroom}\nStay in the current area if the activity can be done there. Never go into other people's rooms unless necessary.\nFor cooking, Jane Anderson should go to the following area in Jane Anderson's house: {kitchen}\n---\nTom Watson is in common room in Tom Watson's apartment. \nTom Watson is going to Hobbs Cafe that has the following areas: {cafe}\nStay in the current area if the activity can be done there. Never go into other people's rooms unless necessary.\nFor getting coffee, Tom Watson should go to the following area in Hobbs Cafe: {cafe}\n---\nEmerald Puyor is going to Puyor's Store that has the following areas: {supply store, Puyor's room, hidden room}\n* Stay in the current area if the activity can be done there. \n* NEVER go into other people's rooms unless necessary.\n\nEmerald Puyor opens Puyor's Store at 7am everyday, and works at the counter until 7pm, at which point she closes the store. is Puyor's Store. For Emerald Puyor, sleeping should go to the following area in sleeping: {"
+output
+"Puyor's Store"
+  '''
+  act_sector = generate_action_sector(act_desp, persona, location)
+  # act_sector = "Puyor's Store"
+  '''
+  input
+  "Jane Anderson is in kitchen in Jane Anderson's house.\nJane Anderson is going to Jane Anderson's house that has the following areas: {kitchen,  bedroom, bathroom}\nStay in the current area if the activity can be done there. Never go into other people's rooms unless necessary.\nFor cooking, Jane Anderson should go to the following area in Jane Anderson's house:\nAnswer: {kitchen}\n---\nTom Watson is in common room in Tom Watson's apartment. \nTom Watson is going to Hobbs Cafe that has the following areas: {cafe}\nStay in the current area if the activity can be done there. Never go into other people's rooms unless necessary.\nFor getting coffee, Tom Watson should go to the following area in Hobbs Cafe:\nAnswer: {cafe}\n---\n\nEmerald Puyor is going to Puyor's Store that has the following areas: {supply store, Puyor's room, hidden room}\n* Stay in the current area if the activity can be done there. \n* NEVER go into other people's rooms unless necessary.\nEmerald Puyor is sleeping. For sleeping, Emerald Puyor should go to the following area in Puyor's Store (MUST pick one of {supply store, Puyor's room, hidden room}):\nAnswer: {"
+  ouptut
+  "Puyor's room"
+  '''
+  act_arena = generate_action_arena(act_desp, persona, location, act_world, act_sector)
+  # act_arena = "Puyor's room"
   act_address = f"{act_world}:{act_sector}:{act_arena}"
+  '''
+  input
+  'Current activity: sleep in bed\nObjects available: {bed, easel, closet, painting}\nPick ONE most relevant object from the objects available: bed\n---\nCurrent activity: painting\nObjects available: {easel, closet, sink, microwave}\nPick ONE most relevant object from the objects available: easel\n---\nCurrent activity: cooking\nObjects available: {stove, sink, fridge, counter}\nPick ONE most relevant object from the objects available: stove\n---\nCurrent activity: watch TV\nObjects available: {couch, TV, remote, coffee table}\nPick ONE most relevant object from the objects available: TV\n---\nCurrent activity: study\nObjects available: {desk, computer, chair, bookshelf}\nPick ONE most relevant object from the objects available: desk\n---\nCurrent activity: talk on the phone\nObjects available: {phone, charger, bed, nightstand}\nPick ONE most relevant object from the objects available: phone\n---\nCurrent activity: sleeping\nObjects available: {bed, map, diary, closet}\nPick ONE most relevant object from the objects available:
+  output
+  'bed'
+  '''
   act_game_object = generate_action_game_object(act_desp, act_address,
-                                                persona, maze)
+                                                persona, location)
+  # act_game_object = 'bed'                                              
   new_address = f"{act_world}:{act_sector}:{act_arena}:{act_game_object}"
-  act_pron = generate_action_pronunciatio(act_desp, persona)
+  # act_pron = generate_action_pronunciatio(act_desp, persona)
+  '''
+  input
+  'Task: Turn the input into (subject, predicate, object). \n\nInput: Sam Johnson is eating breakfast. \nOutput: (Dolores Murphy, eat, breakfast) \n--- \nInput: Joon Park is brewing coffee.\nOutput: (Joon Park, brew, coffee)\n---\nInput: Jane Cook is sleeping. \nOutput: (Jane Cook, is, sleep)\n---\nInput: Michael Bernstein is writing email on a computer. \nOutput: (Michael Bernstein, write, email)\n---\nInput: Percy Liang is teaching students in a classroom. \nOutput: (Percy Liang, teach, students)\n---\nInput: Merrie Morris is running on a treadmill. \nOutput: (Merrie Morris, run, treadmill)\n---\nInput: Emerald Puyor is sleeping. \nOutput: (Emerald Puyor,'
+  output
+  
+0:
+'Emerald Puyor'
+1:
+'is'
+2:
+'sleep'
+  '''
   act_event = generate_action_event_triple(act_desp, persona)
+  # act_event = ['Emerald Puyor', 'is', 'sleep']
   # Persona's actions also influence the object states. We set those up here. 
+  '''
+  input
+  "Task: We want to understand the state of an object that is being used by someone. \n\nLet's think step by step. \nWe want to know about bed's state. \nStep 1. Emerald Puyor is at/using the sleeping.\nStep 2. Describe the bed's state: bed is"
+  output
+  'being slept on'
+  '''
   act_obj_desp = generate_act_obj_desc(act_game_object, act_desp, persona)
-  act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
+  # act_obj_desp = 'being slept on'
+  # act_obj_pron = generate_action_pronunciatio(act_obj_desp, persona)
+  '''
+  input
+  'Task: Turn the input into (subject, predicate, object). \n\nInput: Sam Johnson is eating breakfast. \nOutput: (Dolores Murphy, eat, breakfast) \n--- \nInput: Joon Park is brewing coffee.\nOutput: (Joon Park, brew, coffee)\n---\nInput: Jane Cook is sleeping. \nOutput: (Jane Cook, is, sleep)\n---\nInput: Michael Bernstein is writing email on a computer. \nOutput: (Michael Bernstein, write, email)\n---\nInput: Percy Liang is teaching students in a classroom. \nOutput: (Percy Liang, teach, students)\n---\nInput: Merrie Morris is running on a treadmill. \nOutput: (Merrie Morris, run, treadmill)\n---\nInput: bed is occupied. \nOutput: (bed,'
+  output
+0:
+'bed'
+1:
+'is'
+2:
+'occupied'
+  '''
   act_obj_event = generate_act_obj_event_triple(act_game_object, 
                                                 act_obj_desp, persona)
+  # act_obj_event = ['bed', 'is', 'occupied']
 
   # Adding the action to persona's queue. 
   persona.scratch.add_new_action(new_address, 
                                  int(act_dura), 
                                  act_desp, 
-                                 act_pron, 
+                                #  act_pron, 
+                                None,
                                  act_event,
                                  None,
                                  None,
                                  None,
                                  None,
                                  act_obj_desp, 
-                                 act_obj_pron, 
+                                #  act_obj_pron, 
+                                None,
                                  act_obj_event)
-  
-def plan(persona, maze, personas, new_day, retrieved): 
+
+
+def plan(persona, location, personas, new_day, retrieved): 
   """
   Main cognitive function of the chain. It takes the retrieved memory and 
   perception, as well as the maze and the first day state to conduct both 
@@ -583,52 +1062,50 @@ def plan(persona, maze, personas, new_day, retrieved):
     _long_term_planning(persona, new_day)
   # PART 2: If the current action has expired, we want to create a new plan.
   if persona.scratch.act_check_finished(): 
-    _determine_action(persona, maze)
-#hllt21 : [ skip
-#   # PART 3: If you perceived an event that needs to be responded to (saw 
-#   # another persona), and retrieved relevant information. 
-#   # Step 1: Retrieved may have multiple events represented in it. The first 
-#   #         job here is to determine which of the events we want to focus 
-#   #         on for the persona. 
-#   #         <focused_event> takes the form of a dictionary like this: 
-#   #         dictionary {["curr_event"] = <ConceptNode>, 
-#   #                     ["events"] = [<ConceptNode>, ...], 
-#   #                     ["thoughts"] = [<ConceptNode>, ...]}
-#   focused_event = False
-#   if retrieved.keys(): 
-#     focused_event = _choose_retrieved(persona, retrieved)
-  
-#   # Step 2: Once we choose an event, we need to determine whether the
-#   #         persona will take any actions for the perceived event. There are
-#   #         three possible modes of reaction returned by _should_react. 
-#   #         a) "chat with {target_persona.name}"
-#   #         b) "react"
-#   #         c) False
-#   if focused_event: 
-#     reaction_mode = _should_react(persona, focused_event, personas)
-#     if reaction_mode: 
-#       # If we do want to chat, then we generate conversation 
-#       if reaction_mode[:9] == "chat with":
-#         _chat_react(maze, persona, focused_event, reaction_mode, personas)
-#       elif reaction_mode[:4] == "wait": 
-#         _wait_react(persona, reaction_mode)
-#       # elif reaction_mode == "do other things": 
-#       #   _chat_react(persona, focused_event, reaction_mode, personas)
+    _determine_action(persona, location)
+  # PART 3: If you perceived an event that needs to be responded to (saw 
+  # another persona), and retrieved relevant information. 
+  # Step 1: Retrieved may have multiple events represented in it. The first 
+  #         job here is to determine which of the events we want to focus 
+  #         on for the persona. 
+  #         <focused_event> takes the form of a dictionary like this: 
+  #         dictionary {["curr_event"] = <ConceptNode>, 
+  #                     ["events"] = [<ConceptNode>, ...], 
+  #                     ["thoughts"] = [<ConceptNode>, ...]}
+  focused_event = False
+  if retrieved.keys(): 
+    focused_event = _choose_retrieved(persona, retrieved)
 
-#   # Step 3: Chat-related state clean up. 
-#   # If the persona is not chatting with anyone, we clean up any of the 
-#   # chat-related states here. 
-#   if persona.scratch.act_event[1] != "chat with":
-#     persona.scratch.chatting_with = None
-#     persona.scratch.chat = None
-#     persona.scratch.chatting_end_time = None
-#   # We want to make sure that the persona does not keep conversing with each
-#   # other in an infinite loop. So, chatting_with_buffer maintains a form of 
-#   # buffer that makes the persona wait from talking to the same target 
-#   # immediately after chatting once. We keep track of the buffer value here. 
-#   curr_persona_chat_buffer = persona.scratch.chatting_with_buffer
-#   for persona_name, buffer_count in curr_persona_chat_buffer.items():
-#     if persona_name != persona.scratch.chatting_with: 
-#       persona.scratch.chatting_with_buffer[persona_name] -= 1
-#hllt21 : ] skip
+  # Step 2: Once we choose an event, we need to determine whether the
+  #         persona will take any actions for the perceived event. There are
+  #         three possible modes of reaction returned by _should_react. 
+  #         a) "chat with {target_persona.name}"
+  #         b) "react"
+  #         c) False
+  if focused_event: 
+    reaction_mode = _should_react(persona, focused_event, personas)
+    if reaction_mode: 
+      # If we do want to chat, then we generate conversation 
+      if reaction_mode[:9] == "chat with":
+        _chat_react(location, persona, focused_event, reaction_mode, personas)
+      elif reaction_mode[:4] == "wait": 
+        _wait_react(persona, reaction_mode)
+      # elif reaction_mode == "do other things": 
+      #   _chat_react(persona, focused_event, reaction_mode, personas)
+  
+  # Step 3: Chat-related state clean up. 
+  # If the persona is not chatting with anyone, we clean up any of the 
+  # chat-related states here. 
+  if persona.scratch.act_event[1] != "chat with":
+    persona.scratch.chatting_with = None
+    persona.scratch.chat = None
+    persona.scratch.chatting_end_time = None
+  # We want to make sure that the persona does not keep conversing with each
+  # other in an infinite loop. So, chatting_with_buffer maintains a form of 
+  # buffer that makes the persona wait from talking to the same target 
+  # immediately after chatting once. We keep track of the buffer value here. 
+  curr_persona_chat_buffer = persona.scratch.chatting_with_buffer
+  for persona_name, buffer_count in curr_persona_chat_buffer.items():
+    if persona_name != persona.scratch.chatting_with: 
+      persona.scratch.chatting_with_buffer[persona_name] -= 1
   return persona.scratch.act_address

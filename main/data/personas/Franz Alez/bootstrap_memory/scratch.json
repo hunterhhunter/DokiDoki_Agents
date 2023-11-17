@@ -1,0 +1,211 @@
+{
+  "vision_r": 8,
+  "att_bandwidth": 8,
+  "retention": 8,
+  "curr_time": "February 14, 2023, 00:00:00",
+  "curr_tile": null,
+  "daily_plan_req": "Franz Alez opens his Fishing Tackle Shop at 12pm and works at the counter until 6pm. He closes the Fishing Tackle Shop at 6pm and goes fishing by the river until 8pm.",
+  "name": "Franz Alez",
+  "first_name": "Franz",
+  "last_name": "Alez",
+  "age": 45,
+  "innate": "friendly, playful, generous",
+  "learned": "Franz Alez is the owner of a Fishing Tackle Shop who is friendly to others. He is always thinking of ways to go fishing, which brings him great joy.",
+  "currently": "Franz Alez is planning to host a fishing tournament by the river from 1pm to 3pm on November 12th. To gather people, he is walking around the town from 11am to 12pm, posting flyers and inviting everyone to participate.",
+  "lifestyle": "Franz Alez goes to bed around 10pm, awakes up around 7pm.",
+  "living_area": "dokidoki village:Franz Alez's Fishing Tackle Shop:Master Bedroom",
+  "concept_forget": 100,
+  "daily_reflection_time": 180,
+  "daily_reflection_size": 5,
+  "overlap_reflect_th": 4,
+  "kw_strg_event_reflect_th": 10,
+  "kw_strg_thought_reflect_th": 9,
+  "recency_w": 1,
+  "relevance_w": 1,
+  "importance_w": 1,
+  "recency_decay": 0.995,
+  "importance_trigger_max": 150,
+  "importance_trigger_curr": 143,
+  "importance_ele_n": 1,
+  "thought_count": 5,
+  "daily_req": [
+    "wake up and complete the morning routine at 7:00 am",
+    "at 12:00 pm, have lunch",
+    "open the Fishing Tackle Shop at 12:00 pm and work until 6:00 pm",
+    "close the Fishing Tackle Shop at 6:00 pm and go fishing by the river until 8:00 pm",
+    "return home at 8:00 pm",
+    "have dinner at home at 8:30 pm",
+    "watch TV from 7 to 8 pm"
+  ],
+  "f_daily_schedule": [
+    [
+      "sleeping",
+      420
+    ],
+    [
+      "waking up and completing his morning routine (brushing his teeth)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (taking a shower)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (getting dressed)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (making his bed)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (checking his emails)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (preparing breakfast)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (tidying up the kitchen)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (drinking a cup of coffee)",
+      5
+    ],
+    [
+      "having breakfast",
+      60
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "opening the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament",
+      60
+    ],
+    [
+      "having lunch",
+      60
+    ],
+    [
+      "working at the Fishing Tackle Shop",
+      240
+    ],
+    [
+      "closing the Fishing Tackle Shop and going fishing by the river",
+      120
+    ],
+    [
+      "fishing by the river",
+      60
+    ],
+    [
+      "returning home after fishing by the river",
+      60
+    ],
+    [
+      "having dinner at home",
+      60
+    ],
+    [
+      "watching TV",
+      60
+    ],
+    [
+      "going to bed",
+      60
+    ],
+    [
+      "sleeping",
+      0
+    ]
+  ],
+  "f_daily_schedule_hourly_org": [
+    [
+      "sleeping",
+      420
+    ],
+    [
+      "waking up and completing his morning routine",
+      60
+    ],
+    [
+      "having breakfast",
+      60
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "opening the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament",
+      60
+    ],
+    [
+      "having lunch",
+      60
+    ],
+    [
+      "working at the Fishing Tackle Shop",
+      240
+    ],
+    [
+      "closing the Fishing Tackle Shop and going fishing by the river",
+      120
+    ],
+    [
+      "fishing by the river",
+      60
+    ],
+    [
+      "returning home after fishing by the river",
+      60
+    ],
+    [
+      "having dinner at home",
+      60
+    ],
+    [
+      "watching TV",
+      60
+    ],
+    [
+      "going to bed",
+      60
+    ]
+  ],
+  "act_address": "dokidoki village:Franz Alez's Fishing Tackle Shop:Master Bedroom:bed",
+  "act_start_time": "February 14, 2023, 00:00:00",
+  "act_duration": 420,
+  "act_description": "sleeping",
+  "act_pronunciatio": null,
+  "act_event": [
+    "Franz Alez",
+    "is",
+    "sleep"
+  ],
+  "act_obj_description": "being used",
+  "act_obj_pronunciatio": null,
+  "act_obj_event": [
+    "bed",
+    "be",
+    "used"
+  ],
+  "chatting_with": null,
+  "chat": null,
+  "chatting_with_buffer": {},
+  "chatting_end_time": null,
+  "act_path_set": false,
+  "planned_path": []
+}

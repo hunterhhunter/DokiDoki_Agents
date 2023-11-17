@@ -63,7 +63,7 @@ class Persona:
     self.scratch.save(f_scratch)
 
 
-  def perceive(self, maze):
+  def perceive(persona, accepted, event_checker):
     """
     This function takes the current maze, and returns events that are 
     happening around the persona. Importantly, perceive is guided by 
@@ -89,7 +89,7 @@ class Persona:
         See associative_memory.py -- but to get you a sense of what it 
         receives as its input: "s, p, o, desc, persona.scratch.curr_time"
     """
-    return perceive(self, maze)
+    return perceive(persona, accepted, event_checker)
 
 
   def retrieve(self, perceived):
@@ -108,7 +108,7 @@ class Persona:
     return retrieve(self, perceived)
 
 
-  def plan(self, maze, personas, new_day, retrieved):
+  def plan(self, location, personas, new_day, retrieved):
     """
     Main cognitive function of the chain. It takes the retrieved memory and 
     perception, as well as the maze and the first day state to conduct both 
@@ -130,10 +130,10 @@ class Persona:
     OUTPUT 
       The target action address of the persona (persona.scratch.act_address).
     """
-    return plan(self, maze, personas, new_day, retrieved)
+    return plan(self, location, personas, new_day, retrieved)
 
 
-  def execute(self, maze, personas, plan):
+  def execute(self, plan):
     """
     This function takes the agent's current plan and outputs a concrete 
     execution (what object to use, and what tile to travel to). 
@@ -152,7 +152,7 @@ class Persona:
         writing her next novel (editing her novel) 
         @ double studio:double studio:common room:sofa
     """
-    return execute(self, maze, personas, plan)
+    return execute(self, location, personas, plan)
 
 
   def reflect(self):
@@ -167,7 +167,7 @@ class Persona:
     reflect(self)
 
 
-  def move(self, maze, personas, curr_tile, curr_time):
+  def move(self, location, personas, curr_tile, curr_time):
     """
     This is the main cognitive function where our main sequence is called. 
 
@@ -202,9 +202,9 @@ class Persona:
     self.scratch.curr_time = curr_time
 
     # Main cognitive sequence begins here. 
-    perceived = self.perceive(maze)
+    perceived = self.perceive(location)
     retrieved = self.retrieve(perceived)
-    plan = self.plan(maze, personas, new_day, retrieved)
+    plan = self.plan(location, personas, new_day, retrieved)
     self.reflect()
 
     # <execution> is a triple set that contains the following components: 
@@ -213,8 +213,8 @@ class Persona:
     # <description> is a string description of the movement. e.g., 
     #   writing her next novel (editing her novel) 
     #   @ double studio:double studio:common room:sofa
-    return self.execute(maze, personas, plan)
+    return self.execute(location, personas, plan)
 
 
-  def open_convo_session(self, convo_mode): 
-    open_convo_session(self, convo_mode)
+  # def open_convo_session(self, convo_mode): 
+  #   open_convo_session(self, convo_mode)
