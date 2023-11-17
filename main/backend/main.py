@@ -32,7 +32,9 @@ for u_data in received:
     retrieved = persona.retrieve(perceived)
     # planning = persona.plan(u_data.get_location(), personas, 'First day', retrieved)
     planning = persona.plan(u_data.get_location(), personas, False, retrieved)
-    persona.save(_dir + u_data.get_persona() + "/bootstrap_memory")
+    persona.execute(planning)
 
+    
+    persona.save(_dir + u_data.get_persona() + "/bootstrap_memory")
 
 print('end')
