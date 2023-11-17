@@ -1,0 +1,71 @@
+{
+    "the Ville": {
+        "Tamara Taylor and Carmen Ortiz's house": {
+            "Tamara Taylor's room": {
+                "closet": "idle",
+                "desk": "idle",
+                "bed": "idle"
+            },
+            "common room": {
+                "shelf": "idle",
+                "common room table": "idle"
+            },
+            "bathroom": {
+                "toilet": "idle",
+                "shower": "idle",
+                "bathroom sink": "idle"
+            },
+            "Carmen Ortiz's room": {
+                "bed": "idle",
+                "closet": "idle",
+                "guitar": "idle"
+            },
+            "garden": {
+                "house garden": "idle"
+            }
+        },
+        "Harvey Oak Supply Store": {
+            "supply store": {
+                "supply store product shelf": "idle",
+                "behind the supply store counter": "idle",
+                "supply store counter": "idle"
+            }
+        },
+        "The Willows Market and Pharmacy": {
+            "store": {
+                "behind the pharmacy counter": "idle",
+                "pharmacy store shelf": "idle",
+                "pharmacy store counter": "idle",
+                "grocery store shelf": "idle",
+                "behind the grocery counter": "idle",
+                "grocery store counter": "idle"
+            }
+        },
+        "Hobbs Cafe": {
+            "cafe": {
+                "refrigerator": "idle",
+                "cafe customer seating": "idle",
+                "cooking area": "idle",
+                "kitchen sink": "idle",
+                "behind the cafe counter": "idle",
+                "piano": "idle"
+            }
+        },
+        "The Rose and Crown Pub": {
+            "pub": {
+                "shelf": "run",
+                "refrigerator": "idle",
+                "bar customer seating": "idle",
+                "behind the bar counter": "idle",
+                "kitchen sink": "idle",
+                "cooking area": "idle",
+                "microphone": "idle"
+            }
+        },
+        "Johnson Park": {
+            "park": {
+                "park garden": "idle"
+            }
+        }
+    }
+}
