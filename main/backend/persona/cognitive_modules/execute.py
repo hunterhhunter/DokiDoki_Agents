@@ -3,6 +3,10 @@ import random
 sys.path.append('../../')
 
 def execute(persona, plan): 
+  ## output
+  ## event: (s, p, o)
+  ## location: 이동할 위치
+  ## expired: 행동할 시간
   if "<random>" in plan and persona.scratch.planned_path == []: 
     persona.scratch.act_path_set = False
 
@@ -25,7 +29,8 @@ def execute(persona, plan):
   description = f"{persona.scratch.act_description}"
   description += f" @ {persona.scratch.act_address}"
 
-  execution = location, persona.scratch.act_pronunciatio, description
+  # execution = location, persona.scratch.act_pronunciatio, description
+  execution = persona.scratch.act_event, persona.scratch.act_description, persona.scratch.act_address, persona.act_duration
   return execution
 
 
