@@ -55,7 +55,6 @@ persona, perceived_objects = perceive(file_path)
 
 """감지한 것이 있다면"""
 if persona and perceived_objects:
-	
     # persona_dict: {"persona_name": persona_객체}
     # new_retrieve로 인지된 객체들과 관련된 정보를 n_count개 가져옴
 	retrieved: List[str] = retrieve.new_retrieve(persona_dict[persona], perceived_objects, n_count=30)
