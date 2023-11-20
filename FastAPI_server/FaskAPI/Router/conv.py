@@ -6,7 +6,7 @@ import json
 import os
 
 conver = APIRouter()
-openai.api_key = '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'
+openai.api_key = ''
 
 custom = True
 
