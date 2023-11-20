@@ -30,7 +30,7 @@ def execute(persona, plan):
   description += f" @ {persona.scratch.act_address}"
 
   # execution = location, persona.scratch.act_pronunciatio, description
-  execution = persona.scratch.act_event, location, persona.act_duration
+  execution = persona.scratch.act_event, location, persona.scratch.act_duration
   return execution
 
 

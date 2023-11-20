@@ -9,9 +9,9 @@ location = {
     "world":"dokidoki village", "sector":"Puyor's Store", "arena" : "supply store"
 }
 received = [
-    # UN_Data('Emerald Puyor', location, ["Franz Alez"]),
-    # UN_Data('HonalduSon', location, ["Emerald Puyor"]),
-    # UN_Data('Franz Alez', location, ["HonalduSon"])
+    UN_Data('Emerald Puyor', location, ["Franz Alez"]),
+    UN_Data('HonalduSon', location, ["Emerald Puyor"]),
+    UN_Data('Franz Alez', location, ["HonalduSon"])
 ]
 
 # ---- 초기화
@@ -26,7 +26,7 @@ for p_name in _:
 # ----- 서버에서 반복
 for u_data in received:
     persona = personas[u_data.get_persona()]
-    persona.scratch.curr_time = datetime.datetime.strptime("February 14, 2023, 00:00:00", 
+    persona.scratch.curr_time = datetime.datetime.strptime("February 14, 2023, 08:00:00", 
                                                 "%B %d, %Y, %H:%M:%S")
     perceived = persona.perceive(u_data.get_object(), evc)
     retrieved = persona.retrieve(perceived)

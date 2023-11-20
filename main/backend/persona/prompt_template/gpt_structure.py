@@ -3,7 +3,7 @@ import random
 import openai
 import time
 
-openai.api_key = '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'
+openai.api_key = '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'
 
 def temp_sleep(seconds=0.1):
   time.sleep(seconds)

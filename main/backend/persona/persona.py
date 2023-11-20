@@ -152,7 +152,7 @@ class Persona:
         writing her next novel (editing her novel) 
         @ double studio:double studio:common room:sofa
     """
-    return execute(self, location, personas, plan)
+    return execute(self, plan)
 
 
   def reflect(self):
