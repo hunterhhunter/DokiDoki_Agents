@@ -47,16 +47,8 @@ def get_random_alphanumeric(i=6, j=6):
 # Run loacl Prompt
 #################################################################################
 
-def run_local_prompt_wake_up_hour(persona, test_input=None, verbose=False):
-    """
-    페르소나가 주어지면 페르소나가 꺠어나는 시간을 정수로 반환한다.
-    페르소나가 깨어나는 시간을 나타내는 정수를 반환
-
-    INPUT:
-        persona: 페르소나 인스턴스
-    OUTPUT:
-        깨어나는 시간
-    """
+def run_prompt_wake_up_hour(persona, model='local', test_input=None, verbose=False):
+        
     def create_prompt_input(persona, test_input=None):
         if test_input: return test_input
         prompt_input = [persona.scratch.get_str_iss(),
@@ -96,12 +88,130 @@ def run_local_prompt_wake_up_hour(persona, test_input=None, verbose=False):
     fail_safe = get_fail_safe()
 
     # output = safe_gpt_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
-    output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    if model == 'local':
+        output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    else:
+        output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+
+    if verbose:
+        print_run_prompts(prompt_template, persona, gpt_param, prompt_input, prompt, output)
+
+    return output
+
+   
+    
+
+def run_prompt_generate_daily_request(persona, new_day=None, model='local', test_input=None, verbose=None):
+
+    """오늘 하루 동안 이룰 페르소나의 목표"""
+    def create_prompt_input(persona, new_day, test_input=None):
+        if test_input: return test_input
+        #TODO
+        # 프롬프트 수정 필요
+        if new_day=='first_day':
+            prompt_input = [persona.scratch.get_sentence_iss(),
+                        persona.scratch.get_str_lifestyle(),
+                        persona.scratch.get_str_firstname()]
+        else:
+            # 수정된 프롬프트
+            prompt_input = [persona.scratch.get_sentence_iss(),
+                        persona.scratch.get_str_lifestyle(),
+                        persona.scratch.get_str_firstname()]
+        return prompt_input
+    
+    # 나온 출력값을 정리해서 정수로 한다
+    def __func_clean_up(gpt_response, prompt=""):
+        return gpt_response
+    
+    def __func_validate(gpt_response, prompt=""):
+        try: __func_clean_up(gpt_response, prompt="")
+        except: return False
+        return True
+    # 실패 했을 때를 대비해서
+    def get_fail_safe():
+        fs = 'I am spending today just like yesterday.'
+        return fs
+
+    
+
+    gpt_param = {"max_tokens": 1024, "temperature": 0.8, "top_p": 0.8}
+
+    prompt_template = "local/generate_daily_request_v1.txt"
+
+    prompt_input = create_prompt_input(persona, test_input)
+    prompt = generate_prompt(prompt_input, prompt_template)
+    if debug_prompt: 
+        print("==============prompt_template==============")
+        print(prompt_input) 
+        print("==============prompt==============")
+        print(prompt)
+    fail_safe = get_fail_safe()
+
+    # output = safe_gpt_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    if model =='local':
+        output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    
     
     if verbose:
         print_run_prompts(prompt_template, persona, gpt_param, prompt_input, prompt, output)
 
     return output
+
+
+
+def run_prompt_generate_daily_plan(persona,wakeup_time, new_day=None, model='local', test_input=None, verbose=None):
+
+    """오늘 하루의 스케쥴"""
+    def create_prompt_input(persona,wakeup_time, test_input=None):
+        if test_input: return test_input
+
+        #TODO
+        # 프롬프트 수정 필요
+        prompt_input = [persona.scratch.get_sentence_iss(),
+                        persona.scratch.get_str_lifestyle(),
+                        persona.scratch.get_str_firstname()]
+        return prompt_input
+    
+    # 나온 출력값을 정리해서 정수로 한다
+    def __func_clean_up(gpt_response, prompt=""):
+        return gpt_response
+    
+    def __func_validate(gpt_response, prompt=""):
+        try: __func_clean_up(gpt_response, prompt="")
+        except: return False
+        return True
+    # 실패 했을 때를 대비해서
+    def get_fail_safe():
+        fs = 'I am spending today just like yesterday.'
+        return fs
+
+    
+
+    gpt_param = {"max_tokens": 1024, "temperature": 0.8, "top_p": 0.8}
+
+    # TODO
+    prompt_template = "local/generate_daily_request_v1.txt"
+
+    prompt_input = create_prompt_input(persona, test_input)
+    prompt = generate_prompt(prompt_input, prompt_template)
+    if debug_prompt: 
+        print("==============prompt_template==============")
+        print(prompt_input) 
+        print("==============prompt==============")
+        print(prompt)
+    fail_safe = get_fail_safe()
+
+    # output = safe_gpt_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    if model=='local':
+        output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+    
+    
+    if verbose:
+        print_run_prompts(prompt_template, persona, gpt_param, prompt_input, prompt, output)
+
+    return output
+
+
 
 
 # 일어난 시간을 기준으로 하루의 계획을 짭니다.
@@ -194,6 +304,107 @@ def run_local_prompt_daily_plan(persona,
 
     return output, [output, prompt, gpt_param, prompt_input, fail_safe]
 
+
+def run_gpt_generate_converse_first(init_persona, target_persona, retrieved, target_relationship):
+    def create_prompt_input(init_persona, target_persona, test_input=None):
+        if test_input:return test_input
+        current_location = '집'
+        prompt_input =[]
+        prompt_input += [init_persona.scratch.get_str_iss()]
+        prompt_input += [init_persona.scratch.name]
+        prompt_input += [init_persona.scratch.act_description]
+        prompt_input += [retrieved]
+        prompt_input += [target_relationship]
+        prompt_input += [target_persona.scratch.name]
+        prompt_input += [target_persona.scratch.act_description]
+        prompt_input += [current_location]
+        print('asd')
+        past_convo_summarize = ""
+        for i, v in init_persona.a_mem.id_to_node.items():
+            if v.predicate == 'chat with':
+                past_convo_summarize= v.description
+                break
+        if past_convo_summarize == None:
+            past_convo_summarize='There is no previous conversation history'
+        prompt_input += [past_convo_summarize]
+        prompt_input += [init_persona.a_mem.curr_chat]
+        return prompt_input
+    def __func_clean_up(gpt_response, prompt=""):
+        return gpt_response
+    
+    def __func_validate(gpt_response, prompt=""):
+        try: __func_clean_up(gpt_response, prompt="")
+        except: return False
+        return True
+    # 실패 했을 때를 대비해서
+    def get_fail_safe():
+        fs = 'I am spending today just like yesterday.'
+        return fs
+
+    gpt_param = {"max_tokens": 5, "temperature": 0.8, "top_p": 1}
+    prompt_input = create_prompt_input(init_persona, target_persona)
+    prompt_template = "local/generate_converse_first_v1.txt"
+    prompt = generate_prompt(prompt_input, prompt_template)
+    print("==============prompt_template==============")
+    print(prompt_input) 
+    print("==============prompt==============")
+    print(prompt)
+    # output = 
+    output = safe_local_generate_response(prompt, gpt_param, 5, fail_safe, __func_validate, __func_clean_up)
+
+
+def run_gpt_generate_convers_second(init_persona, target_persona, current_location, retrieved, target_relationship):
+    def create_prompt_input(init_persona, target_persona, test_input=None):
+        if test_input:return test_input
+        current_location = '집'
+        prompt_input =[]
+        prompt_input += [init_persona.scratch.get_str_iss()]
+        prompt_input += [init_persona.scratch.name]
+        prompt_input += [init_persona.scratch.act_description]
+        prompt_input += [retrieved]
+        prompt_input += [target_relationship]
+        prompt_input += [target_persona.scratch.name]
+        prompt_input += [target_persona.scratch.act_description]
+        prompt_input += [current_location]
+        print('asd')
+        past_convo_summarize = ""
+        for i, v in init_persona.a_mem.id_to_node.items():
+            if v.predicate == 'chat with':
+                past_convo_summarize= v.description
+                break
+        if past_convo_summarize == '':
+            past_convo_summarize='There is no previous conversation history'
+        prompt_input += [past_convo_summarize]
+        prompt_input += [init_persona.a_mem.curr_chat]
+        return prompt_input
+
+
+    def __func_clean_up(gpt_response, prompt=""):
+        return gpt_response
+    
+    def __func_validate(gpt_response, prompt=""):
+        try: __func_clean_up(gpt_response, prompt="")
+        except: return False
+        return True
+    
+    # 실패 했을 때를 대비해서
+    def get_fail_safe():
+        fs = 'I am spending today just like yesterday.'
+        return fs
+
+    gpt_param = {"max_tokens": 5, "temperature": 0.8, "top_p": 1}
+    prompt_input = create_prompt_input(init_persona, target_persona)
+    print(prompt_input)
+    prompt_template = "local/generate_converse_second_v1.txt"
+    prompt = generate_prompt(prompt_input, prompt_template)
+    print("==============prompt_template==============")
+    print(prompt_input) 
+    print("==============prompt==============")
+    print(prompt)
+    output = safe_local_generate_response(prompt, gpt_param, 5, get_fail_safe, __func_validate, __func_clean_up)
+
+
+#############################################################
 
 # TODO
 def run_local_prompt_generate_hourly_schedule(persona,

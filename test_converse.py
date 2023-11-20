@@ -166,6 +166,8 @@ if __name__=="__main__":
     캐릭터2 = ''
     utt = run_gpt_generate_converse_first(캐릭터1, 캐릭터2)
     curr_chat.append(utt)
-    utt = run_gpt_generate_converse_second(캐릭터2, 캐릭터1 화자=캐릭터2)
+    utt = run_gpt_generate_converse_second(캐릭터2, 캐릭터1, 화자=캐릭터2)
     curr_chat.append(utt)
     utt = run_gpt_generate_converse_second(캐릭터1, 캐릭터2, 화자=캐릭터1)
+
+    print(curr_chat)

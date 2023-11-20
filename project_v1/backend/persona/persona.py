@@ -8,6 +8,9 @@ from persona.memory_structures.spatial_memory import *
 from persona.memory_structures.associative_memory import *
 from persona.memory_structures.scratch import *
 
+from persona.cognitive_modules.decide import *
+from persona.cognitive_modules.converse import *
+
 class Persona: 
     def __init__(self, name, folder_mem_saved=False):
         # PERSONA BASE STATE 
@@ -29,12 +32,25 @@ class Persona:
         self.scratch = Scratch(scratch_saved)
 
 
-    def decide(self,):
+    def decide(self, persona, objects, player_action, player_chat):
+        decide_boolean = decide_react(persona, objects, player_action, player_chat)
+
+        if decide_boolean[0]:
+            description, converse_partner, spo = generate_action_description(persona, decide_boolean[1])
+            if converse_partner:
+                chat = agent_chat_one_utterance(persona, converse_partner)
+            return description, chat, spo
+        else:
+            pass
 
 
 
-    def move(self,):
+    def move(self,persona, objects, player_action, player_chat):
+        description, chat, spo = self.decide(persona, objects, player_action, player_chat)
 
+        # 저장하는 코드
+        
+        return spo, chat
 
 
 

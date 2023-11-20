@@ -14,369 +14,166 @@ from global_methods import *
 
 class Scratch:
     def __init__(self, f_saved):
-        # 페르소나 하이퍼파라미터
-        # <vision_r>은 페르소나가 주변에서 볼 수 있는 타일의 수를 나타냅니다.
-        self.vision_r = 4
 
-        # <att_bandwidth> 
-        self.att_bandwidth = 3
 
-        # <retention>
-        self.retention = 5
-
-        # 월드 정보
-        # 인지된 세계 시간
+        # 현재 시간
         self.curr_time = None
-        # self.curr_time = datetime.datetime.strptime("November 6, 2023, 00:00:00", "%B %d, %Y, %H:%M:%S")
-
-        # 페르소나의 현재 x, y 타일 좌표
-        self.curr_tile = None
-
-        # 인지된 세계의 일일 요구사항
+        # 현재 xyz 좌표
+        self.curr_xyz = None
+        # 현재 장소
+        self.curr_place = None
+        # 오늘 하루의 목적
         self.daily_plan_req = None
 
-        # 페르소나의 핵심 정체성
-        # 페르소나에 대한 기본 정보
+
+        # 이름
         self.name = None
-        self.first_name = None
-        self.last_name = None
+        # 나이
         self.age = None
-        
-        # L0 영구적인 핵심 특성
+        # 선천적 특성
         self.innate = None
-
-        # L1 안정된 특성
+        # 후천적 경험
         self.learned = None
-
-        # L2 외부 구현
+        # 장기목표
+        self.long_term_goal = None
+        # 단기목표
+        self.short_term_goal = None
+        # 현재 상태
         self.currently = None
+        # 기본 삶
         self.lifestyle = None
+        # 집
         self.living_area = None
 
-        # 반영 변수
-        self.concept_forget = 100
-        self.daily_reflection_time = 60 * 3
-        self.daily_reflection_size = 5
-        self.overlap_reflect_th = 2
-        self.kw_strg_event_reflect_th = 4
-        self.kw_strg_thought_relect_th = 4
-
-        # 새 반영 변수
-        self.recency_w = 1
-        self.relevance_w = 1
-        self.importance_w = 1
-        self.recency_decay = 0.99
-        self.importance_trigger_max = 150
-        self.importance_trigger_curr = self.importance_trigger_max
-        self.importance_ele_n = 0
-        self.thought_count = 5
-
-        '''
-        페르소나 계획
-
-        <daily_req> 는 페르소나가 오늘 달성하려는 다양한 목표의 목록입니다.
-        예: ['작품 그리기', 'TV 보면서 휴식'. '점심 만들기', '더 작품 그리기', '일찍 자기']
-        이 목록은 하루가 끝날 때마다 갱신되어야 하므로 생성 시간을 추적합니다.
-        '''
+        
+        # 하루 목적을 정리
         self.daily_req = []
-        '''
-        <f_daily_schedule> 는 장기 계획의 한 형태를 나타냅니다. 이것은 페르소나의 일일 계획을 설정합니다.
-
-        장기 계획과 단기 분해 방식을 취하고 있음을 주목하세요. 즉, 우리는 먼저 시간별 일정을 설정하고 점차 분해해 나갑니다.
-
-        아래 예제에서 주목해야 할 세 가지:
-
-        1) '잠자기'가 분해되지 않았다는 것을 확인하세요 -- 일부 일반적인 이벤트, 주로 잠자기는 분해할 수 없도록 하드 코딩되어 있습니다.
-        2) 일부 요소들이 분해되기 시작합니다... 하루가 지남에 따라 더 많은 것들이 분해됩니다. (분해될 때 원래의 시간별 액션 설명은 그대로 남습니다.)
-        3) 후반부의 요소들은 분해되지 않습니다. 이벤트가 발생하면, 분해되지 않은 요소들은 무시됩니다.
-        예: [['잠자기', 360], ['일어나서 스트레칭...', 5], ['일어나서 아침 루틴 시작(침대에서 나옴)', 10],...['점심 먹기', 60], ['그림 작업하기', 180],...]]
-        '''
-        self.f_daily_schedule = []
-
-        '''
-        <f_daily_schedule_hourly_org> 는 초기에는 'f_daily_schedule'의 복제본이지만, 시간별 일정의 원래 분해되지 않은 버전을 유지합니다.
-        예: [['잠자기', 360], ['일어나서 아침 루틴 시작', 120], ['그림 작업하기', 240], ...['잠자리에 들기', 60]]
-        '''
-        self.f_daily_schedule_hourly_org = []
-
-        '''
-        현재 행동(curr action)
-        <address> 는 문자열로서 행동이 발생하는 위치의 주소입니다.
-        이것은 "{world}:{sector}:{arena}:{game_objects}"의 형태로 나타납니다.
-
-        몇몇 경우에는 주서의 뒷부분 요소가 없을 수 있으므로 음수 인덱싱 (예:[-1])을 사용하지 않고 접근하는 것이 중요합니다.
-
-        예: "dolores double studio:double studio:bedroom 1:bed"
-        '''
-        self.act_address = None
-
-        '''
-        <start_time> 은 파이썬의 datetime 인스턴스로, 행동이 시작된 시간을 나타냅니다.
-        '''
+        # 하루 시간당 계획
+        self.daily_schedule_hourly = []
+        # 하루 분당 계획
+        self.daily_schedule_min = []
+        
+        # 현재 액션 상태
+        self.act_object = None
         self.act_start_time = None
-
-        '''
-        <duration> 은 정수 값으로, 행동이 얼마나 지속되어야 하는지를 분 단위로 나타냅니다.
-        '''
         self.act_duration = None
-
-        '''
-        <description> 은 행동의 문자열 설명입니다.
-        '''
-        self.act_description = None
-
-        '''
-        <pronunciatio> 는 self.description의 설명적 표현입니다.
-        '''
-        self.act_pronunciation = None
-
-        '''
-        <event_from> 은 현재 페르소나가 참여하고 있는 이벤트 트리플을 나타냅니다.
-        '''
-        self.act_event = (self.name, None, None)
-
-        '''
-        <obj_description> 은 객체 행동의 문자열 설명입니다.
-        '''
-        self.act_obj_description = None
-
-        '''
-        <obj_pronunciatio> 는 객체 행동의 설명적 표현입니다.
-        현재는 이모지로 구성되어있습니다.
-        '''
-        self.act_obj_pronunciatio = None
-
-        '''
-        <obj_event_from> 은 현재 행동 객체가 참여하고 있는 이벤트 트리플을 나타냅니다.
-        '''
-        self.act_obj_event = (self.name, None, None)
-
-        '''
-        <chatting_with> 은 현재 페르소나가 대화하고 있는 다른 페르소나의 문자열 이름입니다. 만약 존재하지 않으면 None입니다.
-        '''
+        self.act_descruption = None
+        self.act_event = None
         self.chatting_with = None
-
-        '''
-        <chat> 은 두 페르소나간의 대화를 저장하는 리스트의 리스트입니다.
-        다음과 같은 형태로 나타납니다:
-        [["Dolores Murphy", "Hi"], ["Maeve Jenson", "Hi"] ...]
-        '''
         self.chat = None
 
-        '''
-        <chatting_with_buffer> 는 예시와 같이 ['Dolores Murphy']=self.vision_r 형태의 딕셔너리입니다.
-        '''
-        self.chatting_with_buffer = dict()
-        self.chatting_end_time = None
-
-        '''
-        <path_set> 은 페르소나가 이 행동을 수행하기 위해 경로를 이미 계산했을 경우 True입니다. 그 경로는 페르소나의 scratch.planned_path 에 저장됩니다.
-        '''
-        self.act_path_set = False
-
-        '''
-        <planned_path> 는 페르소나가 <curr_action>을 실행하기 위해 가야할 경로를 설명하는 x, y 좌표 튜플(tile)의 리스트입니다.
-
-        이 리스트는 페르소나의 현재 타일을 포함하지 않고 목적지 타일을 포함합니다.
-
-        예를 들어, [(50, 10), (49,10), (48, 10),...]
-        '''
-        self.planned_path = []
-        
-
         if check_if_file_exists(f_saved):
-            # bootstrap 파일이 있으면 불러온다
             scratch_load = json.load(open(f_saved))
 
-            # vision_r: 페르소나가 주변에서 볼 수 있는 타일 수
-            self.vision_r = scratch_load["vision_r"]
-            self.att_bandwidth = scratch_load["att_bandwidth"]
-            self.retention = scratch_load["retention"]
-
-            if scratch_load["curr_time"]:
-                self.curr_time = datetime.datetime.strptime(scratch_load["curr_time"], "%B %d, %Y, %H:%M:%S")
-
+            if scratch_load['curr_time']:
+                self.curr_time = datetime.datetime.strptime(scratch_load['curr_time'], "%B %d, %Y, %H:%M:%S")
             else:
-                self.curr_time = None
-            # 현재 위치
-            self.curr_tile = scratch_load["curr_tile"]
+                # 변경
+                self.curr_time = datetime.datetime.now()
+
+            # if scratch_load['curr_xyz']:
+            #     self.curr_xyz = scratch_load['curr_xyz']
+            # else:
+            #     self.curr_xyz=None
+
+            self.curr_place = scratch_load['curr_place']
             self.daily_plan_req = scratch_load["daily_plan_req"]
-            
+
             self.name = scratch_load["name"]
-            self.first_name = scratch_load["first_name"]
-            self.last_name = scratch_load["last_name"]
             self.age = scratch_load["age"]
             self.innate = scratch_load["innate"]
             self.learned = scratch_load["learned"]
+            self.long_term_goal = scratch_load["long_term_goal"]
+            self.short_term_goal = scratch_load["short_term_goal"]
             self.currently = scratch_load["currently"]
             self.lifestyle = scratch_load["lifestyle"]
             self.living_area = scratch_load["living_area"]
 
-            self.concept_forget = scratch_load["concept_forget"]
-            self.daily_reflection_time = scratch_load["daily_reflection_time"]
-            self.datily_reflection_size = scratch_load["daily_reflection_size"]
-            self.overlap_reflect_th = scratch_load["overlap_reflect_th"]
-            self.kw_strg_event_reflect_th = scratch_load["kw_strg_event_reflect_th"]
-            self.kw_strg_thought_reflect_th = scratch_load["kw_strg_thought_reflect_th"]
 
-            self.recency_w = scratch_load["recency_w"]
-            self.relevance_w = scratch_load["relevance_w"]
-            self.importance_w = scratch_load["importance_w"]
-            self.recency_decay = scratch_load["recency_decay"]
-            self.importance_trigger_max = scratch_load["importance_trigger_max"]
-            self.importance_trigger_curr = scratch_load["importance_trigger_curr"]
-            self.importance_ele_n = scratch_load["importance_ele_n"]
-            self.thought_count = scratch_load["thought_count"]
+            # 하루 목적을 정리
+            self.daily_req = scratch_load['daily_req']
+            # 하루 시간당 계획
+            self.daily_schedule_hourly = scratch_load['daily_schedule_hourly']
+            # 하루 분당 계획
+            self.daily_schedule_min = scratch_load['daily_schedule_min']
+        
+            self.act_object = scratch_load['act_object']
+            self.act_start_time = datetime.datetime.strptime(
+                                              scratch_load["act_start_time"],
+                                              "%B %d, %Y, %H:%M:%S"
+                                              )
+            self.act_duration = scratch_load['act_duration']
+            self.act_description = scratch_load['act_description']
+            self.act_event = scratch_load['act_event']
+            self.chatting_with = scratch_load['chatting_with']
+            self.chat = scratch_load['chat']
 
-            self.daily_req = scratch_load["daily_req"]
-            self.f_daily_schedule = scratch_load["f_daily_schedule"]
-            self.f_daily_schedule_hourly_org = scratch_load["f_daily_schedule_hourly_org"]
-
-            self.act_address = scratch_load["act_address"]
-            if scratch_load["act_start_time"]:
-                self.act_start_time = datetime.datetime.strptime(
-                    scratch_load["act_start_time"], "%B %d, %Y, %H:%M:%S"
-                )
-            else:
-                self.curr_time = None
-            self.act_duration = scratch_load["act_duration"]
-            self.act_description = scratch_load["act_description"]
-            self.act_pronunciatio = scratch_load["act_pronunciatio"]
-            self.act_event = tuple(scratch_load["act_event"])
-
-            self.act_obj_description = scratch_load["act_obj_description"]
-            self.act_obj_pronunciatio = scratch_load["act_obj_pronunciatio"]
-            self.act_obj_event = tuple(scratch_load["act_obj_event"])
-
-            self.chatting_with = scratch_load["chatting_with"]
-            self.chat = scratch_load["chat"]
-            self.chatting_with_buffer = scratch_load["chatting_with_buffer"]
-            if scratch_load["chatting_end_time"]: 
-                self.chatting_end_time = datetime.datetime.strptime(
-                                                    scratch_load["chatting_end_time"],
-                                                    "%B %d, %Y, %H:%M:%S")
-            else:
-                self.chatting_end_time = None
-
-            self.act_path_set = scratch_load["act_path_set"]
-            self.planned_path = scratch_load["planned_path"]
-
-
+    
     def save(self, out_json):
         """
-        Save persona's scratch. 
-
-        INPUT: 
-        out_json: The file where we wil be saving our persona's state. 
-        OUTPUT: 
-        None
+        scratch 정보를 저장한다
         """
         scratch = dict() 
-        scratch["vision_r"] = self.vision_r
-        scratch["att_bandwidth"] = self.att_bandwidth
-        scratch["retention"] = self.retention
-
-        scratch["curr_time"] = self.curr_time.strftime("%B %d, %Y, %H:%M:%S")
-        scratch["curr_tile"] = self.curr_tile
-        scratch["daily_plan_req"] = self.daily_plan_req
-
-        scratch["name"] = self.name
-        scratch["first_name"] = self.first_name
-        scratch["last_name"] = self.last_name
-        scratch["age"] = self.age
-        scratch["innate"] = self.innate
-        scratch["learned"] = self.learned
-        scratch["currently"] = self.currently
-        scratch["lifestyle"] = self.lifestyle
-        scratch["living_area"] = self.living_area
-
-        scratch["concept_forget"] = self.concept_forget
-        scratch["daily_reflection_time"] = self.daily_reflection_time
-        scratch["daily_reflection_size"] = self.daily_reflection_size
-        scratch["overlap_reflect_th"] = self.overlap_reflect_th
-        scratch["kw_strg_event_reflect_th"] = self.kw_strg_event_reflect_th
-        scratch["kw_strg_thought_reflect_th"] = self.kw_strg_thought_reflect_th
-
-        scratch["recency_w"] = self.recency_w
-        scratch["relevance_w"] = self.relevance_w
-        scratch["importance_w"] = self.importance_w
-        scratch["recency_decay"] = self.recency_decay
-        scratch["importance_trigger_max"] = self.importance_trigger_max
-        scratch["importance_trigger_curr"] = self.importance_trigger_curr
-        scratch["importance_ele_n"] = self.importance_ele_n
-        scratch["thought_count"] = self.thought_count
-
-        scratch["daily_req"] = self.daily_req
-        scratch["f_daily_schedule"] = self.f_daily_schedule
-        scratch["f_daily_schedule_hourly_org"] = self.f_daily_schedule_hourly_org
-
-        scratch["act_address"] = self.act_address
-        scratch["act_start_time"] = (self.act_start_time
-                                        .strftime("%B %d, %Y, %H:%M:%S"))
-        scratch["act_duration"] = self.act_duration
-        scratch["act_description"] = self.act_description
-        scratch["act_pronunciatio"] = self.act_pronunciatio
-        scratch["act_event"] = self.act_event
-
-        scratch["act_obj_description"] = self.act_obj_description
-        scratch["act_obj_pronunciatio"] = self.act_obj_pronunciatio
-        scratch["act_obj_event"] = self.act_obj_event
-
-        scratch["chatting_with"] = self.chatting_with
-        scratch["chat"] = self.chat
-        scratch["chatting_with_buffer"] = self.chatting_with_buffer
-        if self.chatting_end_time: 
-            scratch["chatting_end_time"] = (self.chatting_end_time
-                                            .strftime("%B %d, %Y, %H:%M:%S"))
-        else: 
-            scratch["chatting_end_time"] = None
-
-        scratch["act_path_set"] = self.act_path_set
-        scratch["planned_path"] = self.planned_path
-
-        with open(out_json, "w") as outfile:
-            json.dump(scratch, outfile, indent=2) 
+        # 현재 시간
+        scratch['curr_time']=self.curr_time
+        # 현재 xyz 좌표
+        scratch['curr_xyz']=self.curr_xyz
+        # 현재 장소
+        scratch['curr_place']=self.curr_place
+        # 오늘 하루의 목적
+        scratch['daily_plan_req']=self.daily_plan_req
 
 
-    def get_f_daily_schedule_index(self, advance=0):
-        '''
-        self.f_daily_schedule의 현재 인덱스를 얻는다.
-        f_daily_schedule는 장기 계획의 한 형태입니다.
+        # 이름
+        scratch['name']=self.name
+        # 나이
+        scratch['age']=self.age
+        # 선천적 특성
+        scratch['innate']=self.innate
+        # 후천적 경험, background
+        scratch['learned']=self.learned
+        # 장기목표
+        scratch["long_term_goal"] = self.long_term_goal
+        # 단기목표
+        scratch["short_term_goal"] = self.short_term_goal
+        # 현재 상태
+        scratch['currently']=self.currently
+        # 기본 삶
+        scratch['lifestyle']=self.lifestyle
+        # 집
+        scratch['living_area']=self.living_area
 
-        self.f_daily_schedule는 지금까지 분해된 행동 시퀀스와 나머지 하루에 대한 시간별 행동 시퀀스를 저장하고 있습니다. self.f_daily_schedule 이 [작업, 기간]으로 구성된 내부 리스트의 리스트인 점을 고려하면, "if elapsed > today_min_elapsed" 조건에 도달할 때까지 기간을 더해 나갑니다. 멈추는 인덱스가 반환할 인덱스입니다.
+        
+        # 하루 목적을 정리
+        scratch['daily_req']=self.daily_req
+        # 하루 시간당 계획
+        scratch['daily_schedule_hourly']=self.daily_schedule_hourly
+        # 하루 분당 계획
+        scratch['daily_schedule_min']=self.daily_schedule_min
+        
+        # 현재 액션 상태
+        scratch['act_object'] = self.act_object
+        scratch['act_start_time'] = self.act_start_time
+        scratch['act_duration'] = self.act_duration
+        scratch['act_descruption'] = self.act_descruption
+        scratch['act_spo'] = self.act_spo
+        scratch['chatting_with'] = self.chatting_with
+        scratch['chat'] = self.chat
 
-        입력:
-            advance: 미래의 시간대 인덱스를 얻기 위해 앞으로 몇 분을 살펴볼지의 정수 값입니다.
-        출력:
-            f_daily_schedule의 현재 인덱스에 대한 정수 값입니다.
-        '''
 
-        # f_daily_schedule 는 하루의 계획을 분단위로 작성한 것
-        # 현재 시간, 즉 오늘 지난 시간을 분으로 치환한다.
+    def get_daily_schedule_hourly_index(self, advance=0):
+        """
+        시간별 스케쥴을 입력 받아서 현재 시간의 시간별 스케쥴의 인덱스를 가져온다.
+        """
+
         today_min_elapsed = 0
         today_min_elapsed += self.curr_time.hour * 60
         today_min_elapsed += self.curr_time.minute
         today_min_elapsed += advance
 
-        # 아래는 없어도 되는 코드
-        # --------------
-        x = 0
-        for task, duration in self.f_daily_schedule:
-            x += duration
-        x = 0
-        for task, duration in self.f_daily_schedule_hourly_org:
-            x += duration
-        # --------------
-
-        # 그 다음 그를 기반으로 현재 인덱스를 계산한다.
         curr_index = 0
         elapsed = 0
-        # f_daily_schedule 에서 시간을 가져온다.
-        # 해당 시간을 elapsed에 넣는다
-        # 만약 elapsed가 today_min_elapsed(현재 시간) 보다 커지면
-        # 해당 인덱스를 반환한다
-        # 만약 크지 않으면 +1 을 하여 다음 인덱스를 탐색한다.
-        for task, duration in self.f_daily_schedule:
+        for task, duration in self.daily_schedule_hourly:
             elapsed += duration
             if elapsed > today_min_elapsed:
                 return curr_index
@@ -384,6 +181,57 @@ class Scratch:
 
         return curr_index
             
+
+    def get_daily_schedule_min_index(self, advance=0):
+        """
+        분별 스케쥴을 입력 받아서 현재 분의 스케쥴 인덱스를 가져온다
+        """
+        today_min_elapsed = 0
+        today_min_elapsed += self.curr_time.hour * 60
+        today_min_elapsed += self.curr_time.minute
+        today_min_elapsed += advance
+
+
+        curr_index = 0
+        elapsed = 0
+        for task, duration in self.daily_schedule_min: 
+            elapsed += duration
+            if elapsed > today_min_elapsed: 
+                return curr_index
+            curr_index += 1
+        return curr_index
+    
+
+    def get_sentance_iss(self):
+        """
+        0 : 이름
+        1 : 나이
+        2 : innate
+        3 : learned
+        4 : long-term goal
+        5 : short-term goal
+        6 : currently
+        7 : lifestyle
+        8 : plan_request
+        9 : current_data
+        """
+        if not isinstance(self.curr_time, datetime.datetime):
+            self.curr_time = datetime.datetime.strptime(
+                self.curr_time, "%B %d, %Y, %H:%M:%S")
+        if self.daily_plan_req == []:
+            text = "The name of <0> is <0>. The age of <0> is <1> years old. The Innate traits of <0> are <2>. The Learned traits of <0> are <3>. The long-term goal of <0> is <4>. <0>'s short-term goal is <5>.Recently, <0> has been <6>. The Lifestyle of <0> is <7>.  Current Data is <9>."
+            data = [self.name, str(self.age), self.innate, self.learned, self.long_term_goal, self.short_term_goal, self.currently, self.lifestyle, self.daily_plan_req, self.curr_time.strftime('%A %B %d')]
+            
+        else:       
+            text = "The name of <0> is <0>. The age of <0> is <1> years old. The Innate traits of <0> are <2>. The Learned traits of <0> are <3>. The long-term goal of <0> is <4>. <0>'s short-term goal is <5>.Recently, <0> has been <6>. The Lifestyle of <0> is <7>. The Daily plan of <0> is <8>. Current Data is <9>."
+            data = [self.name, str(self.age), self.innate, self.learned, self.long_term_goal, self.short_term_goal, self.currently, self.lifestyle, self.daily_plan_req, self.curr_time.strftime('%A %B %d')]
+        
+        
+        for index, value in enumerate(data):
+            text = text.replace(f"<{index}>", value)
+
+        return text
+    
 
     def get_f_daily_schedule_hourly_org_index(self, advance=0):
         """
@@ -461,19 +309,6 @@ class Scratch:
         # commonset += f"Current Date: {formatted_date}\n"
         return commonset
 
-
-    def get_sentance_iss(self):
-
-        text = "The name of <0> is <0>. The age of <0> is <1> years old. The Innate traits of <0> are <2>. The Learned traits of <0> are <3>. Recently, <0> has been <4>. The Lifestyle of <0> is <5>. The Daily plan of <0> is <6>. Current Data is <7>."
-        if not isinstance(self.curr_time, datetime.datetime):
-            self.curr_time = datetime.datetime.strptime(
-                self.curr_time, "%B %d, %Y, %H:%M:%S")
-        data = [self.name, str(self.age), self.innate, self.learned, self.currently, self.lifestyle, self.daily_plan_req, self.curr_time.strftime('%A %B %d')]
-        
-        for index, value in enumerate(data):
-            text = text.replace(f"<{index}>", value)
-
-        return text
     
     def get_str_name(self): 
         return self.name

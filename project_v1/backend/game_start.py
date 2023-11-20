@@ -8,6 +8,8 @@ import global_methods
 
 from persona.persona import Persona
 
+from persona.cognitive_modules.plan import *
+
 class Server_open():
     def __init__(self, front_folder):
 
@@ -56,22 +58,26 @@ class Server_open():
         return
     
 
-    def perceieve_from_game(self):
-        persona.perceieve == True
+    # def perceieve_from_game(self):
+    #     persona.perceieve == True
         
     
 
-    def call_persona(self, persona):
-        if perceieve_from_game(self):
-            persona.move()
+    # def call_persona(self, persona):
+    #     if perceieve_from_game(self):
+    #         persona.move()
 
 
-    def start_server(self,):
+    def start_server(self, persona):
         persona_folder = f""
 
         game_obj_cleanup = dict()
 
-        first_plan()
+        server_close = False
+
+        wake_up_time = generate_wake_up_hour(persona)
+        daily_req = generate_first_daily_request(persona):
+        daily_plan = generate_first_daily_plan(persona, wake_up_time)
 
         while (True):
             if server_close == True:

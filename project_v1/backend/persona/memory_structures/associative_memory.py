@@ -270,3 +270,8 @@ class AssociativeMemory:
             json.dump(self.relationship, outfile)
         
 
+    def load_summarize(self, persona):
+        daily_summarize = json.load(open(self.f_saved+ "/daily_summarize.json"))
+
+    def save_summarizer(self, perosna):
+        

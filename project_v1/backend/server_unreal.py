@@ -29,3 +29,6 @@ def receive_from_local():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
+
+
+    https://qnzkcmhrpaqtbzhs.tunnel-pt.elice.io/proxy/5000/

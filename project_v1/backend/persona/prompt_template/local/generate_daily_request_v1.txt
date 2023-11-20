@@ -1,0 +1,15 @@
+generate_action_v1.txt
+
+Variables: 
+!<INPUT 0>! -- commonset
+!<INPUT 1>! -- persona_name
+!<INPUT 2>! -- past_summarize
+
+<commentblockmarker>###</commentblockmarker>
+Context for the Instruction:
+!<INPUT 0>!
+
+In the past, !<INPUT 1>! experienced !<INPUT 2>!.
+
+Instruction:
+What is the goal for today for !<INPUT 1>!?
