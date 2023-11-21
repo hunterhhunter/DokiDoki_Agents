@@ -1,0 +1,312 @@
+{
+  "vision_r": 8,
+  "att_bandwidth": 8,
+  "retention": 8,
+  "curr_time": "February 14, 2023, 07:00:00",
+  "curr_tile": null,
+  "daily_plan_req": "Honaldu Son's day begins at 7 a.m. with a quick breakfast and preparations for the day. By 7:30 a.m., he's in the fields, inspecting crops for pests or diseases and harvesting ripe fruits and vegetables starting around 8:30 a.m. At 10 a.m., he focuses on equipment maintenance and repairs, followed by a lunch break at noon. The afternoon is spent caring for livestock, including feeding and cleaning, starting at 1 p.m. At 3 p.m., Honaldu visits the village to greet neighbors, returning home by 5 p.m. for dinner preparations. He enjoys dinner with his family at 6 p.m., then relaxes at home, perhaps reading or engaging in a hobby, and prepares for the next day at 10 p.m., heading to bed by 11 p.m.",
+  "name": "Honaldu Son",
+  "first_name": "Honaldu",
+  "last_name": "Son",
+  "age": 25,
+  "innate": "Diligent, Friendly, Healthy, careful",
+  "learned": "Honaldu Son is the owner of a farm and he is good at raising a farm. He's going around town looking for ways to help people.",
+  "currently": "Honaldu Son hopes to make special treats for his favorite neighborhood woman as a Valentine's Day gift on February 14, 2023. He has adjusted his daily routine and is using every spare moment to practice making these special treats.",
+  "lifestyle": "Honaldu Son goes to bed around 11pm, awakes up around 7am.",
+  "living_area": "dokidoki village:Honaldu Farm:residence",
+  "concept_forget": 100,
+  "daily_reflection_time": 180,
+  "daily_reflection_size": 5,
+  "overlap_reflect_th": 4,
+  "kw_strg_event_reflect_th": 10,
+  "kw_strg_thought_reflect_th": 9,
+  "recency_w": 1,
+  "relevance_w": 1,
+  "importance_w": 1,
+  "recency_decay": 0.995,
+  "importance_trigger_max": 150,
+  "importance_trigger_curr": 136,
+  "importance_ele_n": 2,
+  "thought_count": 5,
+  "daily_req": [
+    "wake up and complete the morning routine at 7:00 am",
+    "inspect crops and harvest fruits and vegetables starting at 8:30 am",
+    "give special attention to animals starting at 1:00 pm",
+    "head to village to greet neighbors at 3:00 pm",
+    "come back home and have dinner with family at 6:00 pm"
+  ],
+  "f_daily_schedule": [
+    [
+      "sleeping",
+      420
+    ],
+    [
+      "waking up and completing his morning routine (getting out of bed)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (on the way to brushing his teeth)",
+      0
+    ],
+    [
+      "waking up and completing his morning routine (conversing about two friends, Franz Alez and Honaldu Son, planning to go fishing and deciding to stop by the supply store in Puyor's Store together to buy fishing equipment and farming tools and seeds.)",
+      6
+    ],
+    [
+      "waking up and completing his morning routine (washing his face)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (getting dressed)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (eating breakfast)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (packing his lunch)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (gathering his tools)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (checking the weather)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (saying goodbye to his family)",
+      5
+    ],
+    [
+      "waking up and completing his morning routine (heading out the door)",
+      5
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (inspecting the crops for pests or diseases)",
+      15
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (harvesting ripe fruits and vegetables)",
+      30
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (taking a break)",
+      15
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (inspecting the crops for pests or diseases)",
+      15
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (harvesting ripe fruits and vegetables)",
+      30
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables (taking a break)",
+      14
+    ],
+    [
+      "doing equipment maintenance and repairs",
+      60
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables",
+      60
+    ],
+    [
+      "taking a lunch break",
+      60
+    ],
+    [
+      "caring for livestock, including feeding and cleaning",
+      120
+    ],
+    [
+      "visiting the village to greet neighbors",
+      60
+    ],
+    [
+      "coming back home and having dinner with family",
+      60
+    ],
+    [
+      "having dinner with family",
+      60
+    ],
+    [
+      "relaxing at home and preparing for the next day",
+      60
+    ],
+    [
+      "preparing special treats for his favorite neighborhood woman",
+      180
+    ],
+    [
+      "relaxing at home and preparing for the next day",
+      60
+    ],
+    [
+      "preparing for bed and getting ready to sleep",
+      60
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ]
+  ],
+  "f_daily_schedule_hourly_org": [
+    [
+      "sleeping",
+      420
+    ],
+    [
+      "waking up and completing his morning routine",
+      60
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables",
+      120
+    ],
+    [
+      "doing equipment maintenance and repairs",
+      60
+    ],
+    [
+      "inspecting crops and harvesting fruits and vegetables",
+      60
+    ],
+    [
+      "taking a lunch break",
+      60
+    ],
+    [
+      "caring for livestock, including feeding and cleaning",
+      120
+    ],
+    [
+      "visiting the village to greet neighbors",
+      60
+    ],
+    [
+      "coming back home and having dinner with family",
+      60
+    ],
+    [
+      "having dinner with family",
+      60
+    ],
+    [
+      "relaxing at home and preparing for the next day",
+      60
+    ],
+    [
+      "preparing special treats for his favorite neighborhood woman",
+      180
+    ],
+    [
+      "relaxing at home and preparing for the next day",
+      60
+    ],
+    [
+      "preparing for bed and getting ready to sleep",
+      60
+    ]
+  ],
+  "act_address": "<persona> Franz Alez",
+  "act_start_time": "February 14, 2023, 07:00:00",
+  "act_duration": 6,
+  "act_description": "conversing about two friends, Franz Alez and Honaldu Son, planning to go fishing and deciding to stop by the supply store in Puyor's Store together to buy fishing equipment and farming tools and seeds.",
+  "act_pronunciatio": "\ud83d\udcac",
+  "act_event": [
+    "HonalduSon",
+    "chat with",
+    "Franz Alez"
+  ],
+  "act_obj_description": null,
+  "act_obj_pronunciatio": null,
+  "act_obj_event": [
+    null,
+    null,
+    null
+  ],
+  "chatting_with": "Franz Alez",
+  "chat": [
+    [
+      "Franz Alez",
+      "Good morning, Honaldu! How did you sleep?"
+    ],
+    [
+      "Honaldu Son",
+      "Good morning, Franz! I slept well, thank you. How about you?"
+    ],
+    [
+      "Franz Alez",
+      "I slept well too, thank you. Are you up for some fishing today?"
+    ],
+    [
+      "Honaldu Son",
+      "Sure, I'd love to go fishing. What time are we planning to go?"
+    ],
+    [
+      "Franz Alez",
+      "We can go fishing at 11am. How does that sound?"
+    ],
+    [
+      "Honaldu Son",
+      "That sounds great! I'll meet you at the fishing spot at 11am."
+    ],
+    [
+      "Franz Alez",
+      "Before we go fishing, I need to stop by the supply store in Puyor's Store to get some fishing equipment. Do you want to come along?"
+    ],
+    [
+      "Honaldu Son",
+      "Sure, I'd love to come along. I also need to pick up a few things from the supply store."
+    ],
+    [
+      "Franz Alez",
+      "Great! Let's head to the supply store together then."
+    ],
+    [
+      "Honaldu Son",
+      "What items do you need to pick up from the supply store?"
+    ],
+    [
+      "Franz Alez",
+      "I need to pick up fishing lines, hooks, and bait from the supply store."
+    ],
+    [
+      "Honaldu Son",
+      "I also need to pick up some farming tools and seeds from the supply store."
+    ],
+    [
+      "Franz Alez",
+      "Alright, let's make a list of the items we need to pick up from the supply store."
+    ],
+    [
+      "Honaldu Son",
+      "Do you remember the exact location of the supply store in Puyor's Store?"
+    ],
+    [
+      "Franz Alez",
+      "Yes, the supply store in Puyor's Store is on Main Street, next to the bakery. Let's head there now."
+    ],
+    [
+      "Honaldu Son",
+      "Do you remember if the supply store in Puyor's Store accepts credit cards?"
+    ]
+  ],
+  "chatting_with_buffer": {
+    "Franz Alez": 800
+  },
+  "chatting_end_time": "February 14, 2023, 07:06:00",
+  "act_path_set": false,
+  "planned_path": []
+}

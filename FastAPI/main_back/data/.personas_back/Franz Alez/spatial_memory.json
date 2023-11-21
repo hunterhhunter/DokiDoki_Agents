@@ -1,0 +1,30 @@
+{
+    "dokidoki village": {
+        "Franz Alez's Fishing Tackle Shop": {
+            "Shop": [
+                "fishing rod", 
+                "bobber"
+            ],
+            "River side": [
+                "bridge"
+            ],
+            "Master Bedroom": [
+                "bed", 
+                "stuffed fish"
+            ]
+        },
+        "Puyor's Store": {
+            "supply store": [
+              "beef",
+              "fork",
+              "chicken",
+              "egg",
+              "pen",
+              "fried pan",
+              "hat",
+              "unknown seed",
+              "boots"
+            ]
+        }
+    }
+}
