@@ -216,5 +216,5 @@ class Persona:
     return self.execute(location, personas, plan)
 
 
-  # def open_convo_session(self, convo_mode): 
-  #   open_convo_session(self, convo_mode)
+  def open_convo_session(self, convo_mode): 
+    open_convo_session(self, convo_mode)
