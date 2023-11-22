@@ -6,7 +6,7 @@ _dir = 'C:/Users/gjaischool1/Desktop/git/DokiDoki_Agents/main/data/personas/'
 
 # ----- 유니티로부터 데이터 받는 경우
 location = {
-    "world":"dokidoki village", "sector":"Puyor's Store", "arena" : "supply store"
+     "world":"dokidoki village", "sector":"Puyor's Store", "arena" : "supply store"
 }
 received = [
     UN_Data('Emerald Puyor', location, ["Franz Alez"]),

@@ -1107,5 +1107,5 @@ def plan(persona, location, personas, new_day, retrieved):
   curr_persona_chat_buffer = persona.scratch.chatting_with_buffer
   for persona_name, buffer_count in curr_persona_chat_buffer.items():
     if persona_name != persona.scratch.chatting_with: 
-      persona.scratch.chatting_with_buffer[persona_name] -= 1
+      persona.scratch.chatting_with_buffer[persona_name] = 0
   return persona.scratch.act_address

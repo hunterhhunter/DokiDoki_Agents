@@ -8,7 +8,7 @@ class EventChecker():
     def get_event(self, subject):
         if subject in self.events.keys():
             return self.events[subject]
-        return (subject, None, None, None)
+        return (None, None, None)
 
     def add_event(self, curr_event):
         # curr_event = (subject, predicate, object)

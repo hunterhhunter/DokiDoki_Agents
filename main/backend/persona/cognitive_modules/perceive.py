@@ -17,6 +17,23 @@ def perceive(persona, accepted, event_checker):
 
     event_checker : event를 이끌어내는 이벤트 체크 객체.
   '''
+  # spartial_memory에 정보 추가.
+  for obj in accepted:
+    if ':' in obj:
+      world, sector, arena, item = obj.split(':')
+      if world:
+        if world not in persona.s_mem.tree:
+          persona.s_mem.tree[world] = {}
+      if sector:
+        if sector not in persona.s_mem.tree[world]:
+          persona.s_mem.tree[world][sector] = {}
+      if arena:
+        if arena not in persona.s_mem.tree[world][sector]:
+          persona.s_mem.tree[world][sector][arena] = []
+      if item:
+        if item not in persona.s_mem.tree[world][sector][arena]:
+          persona.s_mem.tree[world][sector][arena] += [item]
+
   ret_events = []
   perceived_events = [(obj, *event_checker.get_event(obj)) for obj in accepted]
   for p_event in perceived_events: 
