@@ -2,9 +2,9 @@
   "vision_r": 8,
   "att_bandwidth": 8,
   "retention": 8,
-  "curr_time": "February 14, 2023, 00:00:00",
+  "curr_time": "February 14, 2023, 10:01:00",
   "curr_tile": null,
-  "daily_plan_req": "Emerald Puyor opens Puyor's Store at 7am everyday, and works at the counter until 7pm, at which point she closes the store.",
+  "daily_plan_req": "Emerald Puyor wake up at 7am everyday, and works at the counter until 7pm, at which point she closes the store.",
   "name": "Emerald Puyor",
   "first_name": "Emerald",
   "last_name": "Puyor",
@@ -12,7 +12,7 @@
   "innate": "deep love, honesty, sense of justice",
   "learned": "Emerald Puyor is the owner of Puyor's Store. He is very good at using magic and is a kind wizard who secretly helps people around him.",
   "currently": "Emerald Puyor is currently experiencing a severe drought and is exploring ways to combat it.",
-  "lifestyle": "Emerald Puyor goes to bed around 9pm, awakes up around 5am.",
+  "lifestyle": "Emerald Puyor goes to bed around 11pm, awakes up around 7am.",
   "living_area": "dokidoki village:Puyor's Store:Puyor's room",
   "concept_forget": 100,
   "daily_reflection_time": 180,
@@ -25,19 +25,19 @@
   "importance_w": 1,
   "recency_decay": 0.995,
   "importance_trigger_max": 150,
-  "importance_trigger_curr": 136,
-  "importance_ele_n": 2,
+  "importance_trigger_curr": -18,
+  "importance_ele_n": 24,
   "thought_count": 5,
   "daily_req": [
-    "wake up and complete the morning routine at 5:00 am",
-    "open Puyor's Store at 7:00 am and work at the counter until 7:00 pm",
+    "wake up and complete the morning routine at 7:00 am",
+    "open Puyor's Store at 9:00 am and work at the counter until 7:00 pm",
     "have dinner at 8:00 pm",
     "use the evening time for strategizing ways to combat the drought that is affecting their region"
   ],
   "f_daily_schedule": [
     [
       "sleeping",
-      300
+      420
     ],
     [
       "waking up and completing her morning routine (getting out of bed)",
@@ -48,8 +48,12 @@
       5
     ],
     [
-      "waking up and completing her morning routine (washing her face)",
-      5
+      "waking up and completing her morning routine (on the way to washing her face)",
+      0
+    ],
+    [
+      "waking up and completing her morning routine (conversing about Franz and Emerald are conversing about their sleep quality.)",
+      1
     ],
     [
       "waking up and completing her morning routine (getting dressed)",
@@ -76,12 +80,120 @@
       5
     ],
     [
-      "opening Puyor's Store",
-      60
+      "opening Puyor's Store (unlocking the door)",
+      5
     ],
     [
-      "working at the counter in Puyor's Store",
-      600
+      "opening Puyor's Store (turning on the lights)",
+      5
+    ],
+    [
+      "opening Puyor's Store (setting up the counter)",
+      10
+    ],
+    [
+      "opening Puyor's Store (organizing the shelves)",
+      10
+    ],
+    [
+      "opening Puyor's Store (setting up the register)",
+      10
+    ],
+    [
+      "opening Puyor's Store (setting up the display cases)",
+      10
+    ],
+    [
+      "opening Puyor's Store (setting up the signs)",
+      5
+    ],
+    [
+      "opening Puyor's Store (checking the store for any last minute tasks)",
+      5
+    ],
+    [
+      "working at the counter in Puyor's Store (greeting customers)",
+      5
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers find what they need)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (ringing up customers)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (stocking shelves)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (taking inventory)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (cleaning the store)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (researching ways to combat the drought)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (talking to customers)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (on the way to taking a break)",
+      0
+    ],
+    [
+      "working at the counter in Puyor's Store (conversing about Franz Alez and Emerald Puyor are chatting about their day and the fishing tournament they are both excited about.)",
+      1
+    ],
+    [
+      "working at the counter in Puyor's Store (organizing the store)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers with questions)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (checking the store's security system)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (making sure the store is tidy)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers with returns)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (checking the store's finances)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers with special orders)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (researching new products)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers with payment)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (helping customers with complaints)",
+      10
+    ],
+    [
+      "working at the counter in Puyor's Store (closing the store)",
+      420
     ],
     [
       "having dinner",
@@ -89,11 +201,111 @@
     ],
     [
       "strategizing ways to combat the drought",
-      300
+      180
     ],
     [
       "going to bed",
       60
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      4
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
     ],
     [
       "sleeping",
@@ -103,7 +315,7 @@
   "f_daily_schedule_hourly_org": [
     [
       "sleeping",
-      300
+      420
     ],
     [
       "waking up and completing her morning routine",
@@ -123,34 +335,43 @@
     ],
     [
       "strategizing ways to combat the drought",
-      300
+      180
     ],
     [
       "going to bed",
       60
     ]
   ],
-  "act_address": "dokidoki village:Puyor's Store:Puyor's room:bed",
-  "act_start_time": "February 14, 2023, 00:00:00",
-  "act_duration": 300,
-  "act_description": "sleeping",
-  "act_pronunciatio": null,
+  "act_address": "<persona> Franz Alez",
+  "act_start_time": "February 14, 2023, 10:01:00",
+  "act_duration": 1,
+  "act_description": "conversing about Franz Alez and Emerald Puyor are chatting about their day and the fishing tournament they are both excited about.",
+  "act_pronunciatio": "\ud83d\udcac",
   "act_event": [
     "Emerald Puyor",
-    "is",
-    "sleep"
+    "chat with",
+    "Franz Alez"
   ],
-  "act_obj_description": "being used",
+  "act_obj_description": null,
   "act_obj_pronunciatio": null,
   "act_obj_event": [
-    "bed",
-    "be",
-    "used"
+    null,
+    null,
+    null
   ],
-  "chatting_with": null,
-  "chat": null,
+  "chatting_with": "Franz Alez",
+  "chat": [
+    [
+      "Franz Alez",
+      "Hey Emerald! How's your day going so far?"
+    ],
+    [
+      "Emerald Puyor",
+      "Hey Franz! My day is going well, thank you. How about you? Are you excited about the fishing tournament?"
+    ]
+  ],
   "chatting_with_buffer": {},
-  "chatting_end_time": null,
+  "chatting_end_time": "February 14, 2023, 10:02:00",
   "act_path_set": false,
   "planned_path": []
 }

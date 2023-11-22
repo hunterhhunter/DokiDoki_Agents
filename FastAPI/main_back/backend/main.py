@@ -13,13 +13,13 @@ location = {
 }
 received = [
     # UN_Data('Emerald Puyor', location, ["Franz Alez"]),
-    # UN_Data('HonalduSon', location, ["Emerald Puyor"]),
-    # UN_Data('Franz Alez', location, ["HonalduSon"])
+    # UN_Data('Honaldu Son', location, ["Emerald Puyor"]),
+    # UN_Data('Franz Alez', location, ["Honaldu Son"])
 ]
 
 # ---- 초기화
 evc = EventChecker()
-_ = ['Emerald Puyor', 'Franz Alez', 'HonalduSon']
+_ = ['Emerald Puyor', 'Franz Alez', 'Honaldu Son']
 personas = {}
 for p_name in _:
     persona = Persona(p_name, _dir + p_name)

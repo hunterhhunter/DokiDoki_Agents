@@ -19,16 +19,17 @@ def start_test(time: str):
     location = {
     "world":"dokidoki village", "sector":"Puyor's Store", "arena" : "supply store"
     }
+    location2 = {"world":"dokidoki village", "sector":"Franz Alez's Fishing Tackle Shop", "arena" : "Shop"}
     received = [
-        UN_Data('HonalduSon', location, ["Franz Alez"]),
-        UN_Data('Franz Alez', location, ['HonalduSon'])
+        UN_Data('Emerald Puyor', location, ['Franz Alez']),
+        UN_Data('Franz Alez', location, ['Emerald Puyor'])
         ]
 
     executions = [] 
 
     # ---- 초기화
     evc = EventChecker()
-    _ = ['Emerald Puyor', 'Franz Alez', 'HonalduSon']
+    _ = ['Emerald Puyor', 'Franz Alez']
     personas = {}
     for p_name in _:
         persona = Persona(p_name, _dir + p_name)
@@ -41,33 +42,46 @@ def start_test(time: str):
         persona.scratch.curr_time = datetime.datetime.strptime(time,
                                                                "%B %d, %Y, %H:%M:%S")
         
-        print("""============================================
-                                    시작                    
-                ============================================""")
-        perceived = persona.perceive(u_data.get_object(), evc)
-        print("""============================================
+        print("""\t\t============================================
+                                    시작 %s                  
+                ============================================""".format(persona.scratch.name))
+        
+        print("""\t\t============================================
                                   perceive                    
+                ============================================""") 
+        perceived = persona.perceive(u_data.get_object(), evc)
+
+        print("""\t\t============================================
+                                  retrieve                  
                 ============================================""")
         retrieved = persona.retrieve(perceived)
-        print("""============================================
-                                  retrieve                  
+
+        for p_name in personas.keys():
+            personas[p_name].save(_dir + p_name + "/bootstrap_memory")
+
+        print("""\t\t============================================
+                                  Planning             
                 ============================================""")
         # planning = persona.plan(u_data.get_location(), personas, 'First day', retrieved)
         planning = persona.plan(u_data.get_location(), personas, False, retrieved)
-        print("""============================================
-                                  Planning             
-                ============================================""")
-        execution = persona.execute(planning)
-        print("""============================================
+
+        for p_name in personas.keys():
+            personas[p_name].save(_dir + p_name + "/bootstrap_memory")
+
+        print("""\t\t============================================
                                   execute
                 ============================================""")
+        execution = persona.execute(planning)
+
         
+        return_dict = {"Sub": execution[0][0], "P": execution[0][1], "Obj": execution[0][2], "location": execution[1][0], "duration": execution[2],
+        "chat": persona.scratch.chat}
+
+
         print("check /bootstrap_memory")
-        print(execution)
-        executions.append(execution)
+        print(return_dict)
+        executions.append(return_dict)
         
-    for p_name in personas.keys():
-        personas[p_name].save(_dir + u_data.get_persona() + "/bootstrap_memory")
 
     return {'executions': executions}
     

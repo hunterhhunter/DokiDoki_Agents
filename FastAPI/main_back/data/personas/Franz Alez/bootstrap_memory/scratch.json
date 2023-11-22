@@ -2,18 +2,18 @@
   "vision_r": 8,
   "att_bandwidth": 8,
   "retention": 8,
-  "curr_time": "February 14, 2023, 07:00:00",
+  "curr_time": "February 14, 2023, 10:01:00",
   "curr_tile": null,
-  "daily_plan_req": "Honaldu Son's day begins at 7 a.m. with a quick breakfast and preparations for the day. By 7:30 a.m., he's in the fields, inspecting crops for pests or diseases and harvesting ripe fruits and vegetables starting around 8:30 a.m. At 10 a.m., he focuses on equipment maintenance and repairs, followed by a lunch break at noon. The afternoon is spent caring for livestock, including feeding and cleaning, starting at 1 p.m. At 3 p.m., Honaldu visits the village to greet neighbors, returning home by 5 p.m. for dinner preparations. He enjoys dinner with his family at 6 p.m., then relaxes at home, perhaps reading or engaging in a hobby, and prepares for the next day at 10 p.m., heading to bed by 11 p.m.",
-  "name": "Honaldu Son",
-  "first_name": "Honaldu",
-  "last_name": "Son",
-  "age": 25,
-  "innate": "Diligent, Friendly, Healthy, careful",
-  "learned": "Honaldu Son is the owner of a farm and he is good at raising a farm. He's going around town looking for ways to help people.",
-  "currently": "Honaldu Son hopes to make special treats for his favorite neighborhood woman as a Valentine's Day gift on February 14, 2023. He has adjusted his daily routine and is using every spare moment to practice making these special treats.",
-  "lifestyle": "Honaldu Son goes to bed around 11pm, awakes up around 7am.",
-  "living_area": "dokidoki village:Honaldu Farm:residence",
+  "daily_plan_req": "Franz Alez opens his Fishing Tackle Shop at 12pm and works at the counter until 6pm. He closes the Fishing Tackle Shop at 6pm and goes fishing by the river until 8pm.",
+  "name": "Franz Alez",
+  "first_name": "Franz",
+  "last_name": "Alez",
+  "age": 45,
+  "innate": "friendly, playful, generous",
+  "learned": "Franz Alez is the owner of a Fishing Tackle Shop who is friendly to others. He is always thinking of ways to go fishing, which brings him great joy.",
+  "currently": "Franz Alez is planning to host a fishing tournament by the river from 1pm to 3pm on November 12th. To gather people, he is walking around the town from 11am to 12pm, posting flyers and inviting everyone to participate.",
+  "lifestyle": "Franz Alez goes to bed around 10pm, awakes up around 7pm.",
+  "living_area": "dokidoki village:Franz Alez's Fishing Tackle Shop:Master Bedroom",
   "concept_forget": 100,
   "daily_reflection_time": 180,
   "daily_reflection_size": 5,
@@ -25,15 +25,17 @@
   "importance_w": 1,
   "recency_decay": 0.995,
   "importance_trigger_max": 150,
-  "importance_trigger_curr": 136,
-  "importance_ele_n": 2,
+  "importance_trigger_curr": -46,
+  "importance_ele_n": 28,
   "thought_count": 5,
   "daily_req": [
     "wake up and complete the morning routine at 7:00 am",
-    "inspect crops and harvest fruits and vegetables starting at 8:30 am",
-    "give special attention to animals starting at 1:00 pm",
-    "head to village to greet neighbors at 3:00 pm",
-    "come back home and have dinner with family at 6:00 pm"
+    "at 12:00 pm, have lunch",
+    "open the Fishing Tackle Shop at 12:00 pm and work until 6:00 pm",
+    "close the Fishing Tackle Shop at 6:00 pm and go fishing by the river until 8:00 pm",
+    "return home at 8:00 pm",
+    "have dinner at home at 8:30 pm",
+    "watch TV from 7 to 8 pm"
   ],
   "f_daily_schedule": [
     [
@@ -41,116 +43,284 @@
       420
     ],
     [
-      "waking up and completing his morning routine (getting out of bed)",
+      "waking up and completing his morning routine (brushing his teeth)",
       5
     ],
     [
-      "waking up and completing his morning routine (on the way to brushing his teeth)",
+      "waking up and completing his morning routine (taking a shower)",
+      10
+    ],
+    [
+      "waking up and completing his morning routine (on the way to getting dressed)",
       0
     ],
     [
-      "waking up and completing his morning routine (conversing about two friends, Franz Alez and Honaldu Son, planning to go fishing and deciding to stop by the supply store in Puyor's Store together to buy fishing equipment and farming tools and seeds.)",
-      6
+      "waking up and completing his morning routine (conversing about Franz and Emerald are conversing about their sleep quality.)",
+      1
     ],
     [
-      "waking up and completing his morning routine (washing his face)",
+      "waking up and completing his morning routine (making his bed)",
       5
     ],
     [
-      "waking up and completing his morning routine (getting dressed)",
+      "waking up and completing his morning routine (checking his emails)",
       10
     ],
     [
-      "waking up and completing his morning routine (eating breakfast)",
+      "waking up and completing his morning routine (preparing breakfast)",
       10
     ],
     [
-      "waking up and completing his morning routine (packing his lunch)",
+      "waking up and completing his morning routine (tidying up the kitchen)",
       5
     ],
     [
-      "waking up and completing his morning routine (gathering his tools)",
+      "waking up and completing his morning routine (drinking a cup of coffee)",
       5
     ],
     [
-      "waking up and completing his morning routine (checking the weather)",
+      "having breakfast (making coffee)",
       5
     ],
     [
-      "waking up and completing his morning routine (saying goodbye to his family)",
-      5
+      "having breakfast (preparing breakfast)",
+      10
     ],
     [
-      "waking up and completing his morning routine (heading out the door)",
-      5
-    ],
-    [
-      "inspecting crops and harvesting fruits and vegetables (inspecting the crops for pests or diseases)",
+      "having breakfast (eating breakfast)",
       15
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables (harvesting ripe fruits and vegetables)",
-      30
+      "having breakfast (cleaning up the kitchen)",
+      10
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables (taking a break)",
-      15
+      "having breakfast (checking the weather forecast)",
+      5
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables (inspecting the crops for pests or diseases)",
-      15
+      "having breakfast (checking his emails)",
+      5
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables (harvesting ripe fruits and vegetables)",
-      30
+      "having breakfast (getting dressed)",
+      5
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables (taking a break)",
-      14
+      "having breakfast (gathering his fishing supplies)",
+      5
     ],
     [
-      "doing equipment maintenance and repairs",
+      "preparing to open the Fishing Tackle Shop (checking the inventory)",
+      10
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop (setting up the shop)",
+      10
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop (organizing the fishing tackle)",
+      10
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop (preparing the cash register)",
+      10
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop (making sure the shop is clean)",
+      10
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop (printing out the flyers for the fishing tournament)",
+      10
+    ],
+    [
+      "opening the Fishing Tackle Shop (setting up the counter)",
+      10
+    ],
+    [
+      "opening the Fishing Tackle Shop (organizing the merchandise)",
+      10
+    ],
+    [
+      "opening the Fishing Tackle Shop (on the way to setting up the cash register)",
+      0
+    ],
+    [
+      "opening the Fishing Tackle Shop (conversing about Franz Alez and Emerald Puyor are chatting about their day and the fishing tournament they are both excited about.)",
+      1
+    ],
+    [
+      "opening the Fishing Tackle Shop (stocking the shelves)",
+      10
+    ],
+    [
+      "opening the Fishing Tackle Shop (taking a break)",
+      5
+    ],
+    [
+      "opening the Fishing Tackle Shop (cleaning the shop)",
+      10
+    ],
+    [
+      "opening the Fishing Tackle Shop (setting up the sign outside)",
+      5
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (walking around town)",
+      5
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (posting flyers)",
+      10
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (talking to people about the tournament)",
+      10
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (handing out flyers)",
+      10
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (taking a break)",
+      5
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (talking to people about the tournament)",
+      10
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (handing out flyers)",
+      5
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament (taking a break)",
+      5
+    ],
+    [
+      "having lunch",
       60
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables",
-      60
+      "working at the Fishing Tackle Shop",
+      240
     ],
     [
-      "taking a lunch break",
-      60
-    ],
-    [
-      "caring for livestock, including feeding and cleaning",
+      "closing the Fishing Tackle Shop and going fishing by the river",
       120
     ],
     [
-      "visiting the village to greet neighbors",
+      "fishing by the river",
       60
     ],
     [
-      "coming back home and having dinner with family",
+      "returning home after fishing by the river",
       60
     ],
     [
-      "having dinner with family",
+      "having dinner at home",
       60
     ],
     [
-      "relaxing at home and preparing for the next day",
+      "watching TV",
       60
     ],
     [
-      "preparing special treats for his favorite neighborhood woman",
-      180
-    ],
-    [
-      "relaxing at home and preparing for the next day",
+      "going to bed",
       60
     ],
     [
-      "preparing for bed and getting ready to sleep",
-      60
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      9
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
+    ],
+    [
+      "sleeping",
+      0
     ],
     [
       "sleeping",
@@ -171,63 +341,63 @@
       60
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables",
+      "having breakfast",
+      60
+    ],
+    [
+      "preparing to open the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "opening the Fishing Tackle Shop",
+      60
+    ],
+    [
+      "walking around town posting flyers and inviting people to participate in the fishing tournament",
+      60
+    ],
+    [
+      "having lunch",
+      60
+    ],
+    [
+      "working at the Fishing Tackle Shop",
+      240
+    ],
+    [
+      "closing the Fishing Tackle Shop and going fishing by the river",
       120
     ],
     [
-      "doing equipment maintenance and repairs",
+      "fishing by the river",
       60
     ],
     [
-      "inspecting crops and harvesting fruits and vegetables",
+      "returning home after fishing by the river",
       60
     ],
     [
-      "taking a lunch break",
+      "having dinner at home",
       60
     ],
     [
-      "caring for livestock, including feeding and cleaning",
-      120
-    ],
-    [
-      "visiting the village to greet neighbors",
+      "watching TV",
       60
     ],
     [
-      "coming back home and having dinner with family",
-      60
-    ],
-    [
-      "having dinner with family",
-      60
-    ],
-    [
-      "relaxing at home and preparing for the next day",
-      60
-    ],
-    [
-      "preparing special treats for his favorite neighborhood woman",
-      180
-    ],
-    [
-      "relaxing at home and preparing for the next day",
-      60
-    ],
-    [
-      "preparing for bed and getting ready to sleep",
+      "going to bed",
       60
     ]
   ],
-  "act_address": "<persona> Franz Alez",
-  "act_start_time": "February 14, 2023, 07:00:00",
-  "act_duration": 6,
-  "act_description": "conversing about two friends, Franz Alez and Honaldu Son, planning to go fishing and deciding to stop by the supply store in Puyor's Store together to buy fishing equipment and farming tools and seeds.",
+  "act_address": "<persona> Emerald Puyor",
+  "act_start_time": "February 14, 2023, 10:01:00",
+  "act_duration": 1,
+  "act_description": "conversing about Franz Alez and Emerald Puyor are chatting about their day and the fishing tournament they are both excited about.",
   "act_pronunciatio": "\ud83d\udcac",
   "act_event": [
-    "HonalduSon",
+    "Franz Alez",
     "chat with",
-    "Franz Alez"
+    "Emerald Puyor"
   ],
   "act_obj_description": null,
   "act_obj_pronunciatio": null,
@@ -236,77 +406,19 @@
     null,
     null
   ],
-  "chatting_with": "Franz Alez",
+  "chatting_with": "Emerald Puyor",
   "chat": [
     [
       "Franz Alez",
-      "Good morning, Honaldu! How did you sleep?"
+      "Hey Emerald! How's your day going so far?"
     ],
     [
-      "Honaldu Son",
-      "Good morning, Franz! I slept well, thank you. How about you?"
-    ],
-    [
-      "Franz Alez",
-      "I slept well too, thank you. Are you up for some fishing today?"
-    ],
-    [
-      "Honaldu Son",
-      "Sure, I'd love to go fishing. What time are we planning to go?"
-    ],
-    [
-      "Franz Alez",
-      "We can go fishing at 11am. How does that sound?"
-    ],
-    [
-      "Honaldu Son",
-      "That sounds great! I'll meet you at the fishing spot at 11am."
-    ],
-    [
-      "Franz Alez",
-      "Before we go fishing, I need to stop by the supply store in Puyor's Store to get some fishing equipment. Do you want to come along?"
-    ],
-    [
-      "Honaldu Son",
-      "Sure, I'd love to come along. I also need to pick up a few things from the supply store."
-    ],
-    [
-      "Franz Alez",
-      "Great! Let's head to the supply store together then."
-    ],
-    [
-      "Honaldu Son",
-      "What items do you need to pick up from the supply store?"
-    ],
-    [
-      "Franz Alez",
-      "I need to pick up fishing lines, hooks, and bait from the supply store."
-    ],
-    [
-      "Honaldu Son",
-      "I also need to pick up some farming tools and seeds from the supply store."
-    ],
-    [
-      "Franz Alez",
-      "Alright, let's make a list of the items we need to pick up from the supply store."
-    ],
-    [
-      "Honaldu Son",
-      "Do you remember the exact location of the supply store in Puyor's Store?"
-    ],
-    [
-      "Franz Alez",
-      "Yes, the supply store in Puyor's Store is on Main Street, next to the bakery. Let's head there now."
-    ],
-    [
-      "Honaldu Son",
-      "Do you remember if the supply store in Puyor's Store accepts credit cards?"
+      "Emerald Puyor",
+      "Hey Franz! My day is going well, thank you. How about you? Are you excited about the fishing tournament?"
     ]
   ],
-  "chatting_with_buffer": {
-    "Franz Alez": 800
-  },
-  "chatting_end_time": "February 14, 2023, 07:06:00",
+  "chatting_with_buffer": {},
+  "chatting_end_time": "February 14, 2023, 10:02:00",
   "act_path_set": false,
   "planned_path": []
 }
