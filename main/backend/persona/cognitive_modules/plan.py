@@ -7,6 +7,31 @@ from persona.prompt_template.run_gpt_prompt import *
 from persona.cognitive_modules.retrieve import *
 from persona.cognitive_modules.converse import *
 
+def generate_action_pronunciatio(act_desp, persona): 
+  """TODO 
+  Given an action description, creates an emoji string description via a few
+  shot prompt. 
+
+  Does not really need any information from persona. 
+
+  INPUT: 
+    act_desp: the description of the action (e.g., "sleeping")
+    persona: The Persona class instance
+  OUTPUT: 
+    a string of emoji that translates action description.
+  EXAMPLE OUTPUT: 
+    "🧈🍞"
+  """
+  # if debug: print ("GNS FUNCTION: <generate_action_pronunciatio>")
+  try: 
+    x = run_gpt_prompt_pronunciatio(act_desp, persona)[0]
+  except: 
+    x = "🙂"
+
+  if not x: 
+    return "🙂"
+  return x
+
 def generate_decide_to_react(init_persona, target_persona, retrieved): 
   # if debug: print ("GNS FUNCTION: <generate_decide_to_react>")
   return run_gpt_prompt_decide_to_react(init_persona, target_persona, retrieved)[0]
@@ -1023,7 +1048,6 @@ output
                                  int(act_dura), 
                                  act_desp, 
                                 #  act_pron, 
-                                None,
                                  act_event,
                                  None,
                                  None,

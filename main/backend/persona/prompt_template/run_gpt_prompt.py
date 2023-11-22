@@ -34,6 +34,7 @@ GPT_template = {
     "run_gpt_generate_safety_score" : "anthromorphosization.txt",
     "run_gpt_prompt_generate_next_convo_line" : "generate_next_convo_line.txt",
     "run_gpt_prompt_summarize_ideas" : "summarize_ideas.txt",
+    "run_gpt_prompt_pronunciatio" : "generate_pronunciatio.txt",
 } 
 
 def extract_first_json_dict(data_str):
@@ -2023,6 +2024,65 @@ def run_gpt_prompt_summarize_ideas(persona, statements, question, test_input=Non
   example_output = 'Jane Doe is working on a project' ########
   special_instruction = 'The output should be a string that responds to the question.' ########
   fail_safe = get_fail_safe() ########
+  output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe,
+                                          __chat_func_validate, __chat_func_clean_up, True)
+  if output != False: 
+    return output, [output, prompt, gpt_param, prompt_input, fail_safe]
+  
+def run_gpt_prompt_pronunciatio(action_description, persona, verbose=False): 
+  def create_prompt_input(action_description): 
+    if "(" in action_description: 
+      action_description = action_description.split("(")[-1].split(")")[0]
+    prompt_input = [action_description]
+    return prompt_input
+  
+  def __func_clean_up(gpt_response, prompt=""):
+    cr = gpt_response.strip()
+    if len(cr) > 3:
+      cr = cr[:3]
+    return cr
+
+  def __func_validate(gpt_response, prompt=""): 
+    try: 
+      __func_clean_up(gpt_response, prompt="")
+      if len(gpt_response) == 0: 
+        return False
+    except: return False
+    return True 
+
+  def get_fail_safe(): 
+    fs = "😋"
+    return fs
+
+
+  # ChatGPT Plugin ===========================================================
+  def __chat_func_clean_up(gpt_response, prompt=""): ############
+    cr = gpt_response.strip()
+    if len(cr) > 3:
+      cr = cr[:3]
+    return cr
+
+  def __chat_func_validate(gpt_response, prompt=""): ############
+    try: 
+      __func_clean_up(gpt_response, prompt="")
+      if len(gpt_response) == 0: 
+        return False
+    except: return False
+    return True 
+    return True
+
+  print ("asdhfapsh8p9hfaiafdsi;ldfj as DEBUG 4") ########
+  gpt_param = {"engine": "text-davinci-002", "max_tokens": 15, 
+               "temperature": 0, "top_p": 1, "stream": False,
+               "frequency_penalty": 0, "presence_penalty": 0, "stop": None}
+  # prompt_template = "persona/prompt_template/v3_ChatGPT/generate_pronunciatio_v1.txt" ########
+  prompt_template = "main/backend/persona/prompt_template/template/" + GPT_template["run_gpt_prompt_pronunciatio"]
+  
+  prompt_input = create_prompt_input(action_description)  ########
+  prompt = generate_prompt(prompt_input, prompt_template)
+  example_output = "🛁🧖‍♀️" ########
+  special_instruction = "The value for the output must ONLY contain the emojis." ########
+  fail_safe = get_fail_safe()
   output = ChatGPT_safe_generate_response(prompt, example_output, special_instruction, 3, fail_safe,
                                           __chat_func_validate, __chat_func_clean_up, True)
   if output != False: 
