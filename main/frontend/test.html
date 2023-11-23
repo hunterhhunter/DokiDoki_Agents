@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Interface</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #fff; /* bg-white */
+      color: #4b5563; /* gray-700 */
+    }
+    .chat-input-container {
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+    .chat-input {
+      border: 1px solid #e5e7eb; /* gray-300 */
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      overflow: hidden; /* 높이 조절을 위해 overflow 추가 */
+    }
+    .chat-input input {
+      border: none;
+      outline: none;
+      padding-left: 1rem;
+      width: calc(100% - 30px); /* 버튼 공간 제외한 나머지 영역 사용 */
+      float: left; /* 왼쪽으로 플로팅 */
+      box-sizing: border-box; /* 패딩을 요소의 크기에 포함시킴 */
+    }
+    .chat-input button {
+      float: right; /* 오른쪽으로 플로팅 */
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+    }
+    .chat-input svg {
+      width: 24px;
+      height: 24px;
+    }
+    .disclaimer {
+      text-align: center;
+      font-size: 0.875rem; /* text-sm */
+      color: #6b7280; /* gray-500 */
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-input-container">
+    <div class="chat-input">
+      <input type="text" placeholder="Message ChatGPT..." aria-label="Message ChatGPT">
+      <button type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </button>
+    </div>
+    <p class="disclaimer">ChatGPT can make mistakes. Consider checking important information.</p>
+  </div>
+</body>
+</html>
