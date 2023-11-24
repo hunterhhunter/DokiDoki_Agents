@@ -1,91 +1,255 @@
-body {
-    font-family: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+@font-face {
+    font-family: "Ghana";
+    src: url("./Ghanachocolate.ttf") format("truetype");
+    font-weight: normal;
 }
 
-.top-fixed {
-    top: 0;
-    background-color: rgba(255, 255, 255, 0.7);
-    width: 100%;
-    position: sticky;
-    margin: auto;
+:root {
+    --max-width: 1500px;
+    --sector-width: 1500px;
 }
 
-.bottom-fixed {
-    bottom: 0;
-    margin: auto;
-    width: 100%;
-    background-color: rgba(255, 255, 255);
-    position: fixed;
+div {
+    font-family: 'Ghana', sans-serif;
 }
 
-#main-logo {
-    font-size: 18px;
-    font-weight: 500;
-    height: 50px;
-    line-height: 50px;
-    width: 200px;
-    text-align: center;
-    /* border: 1px solid black; */
-    background-color: white;
-}
-
-.prompt-form {
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    padding: 0.5rem 1rem;
-    overflow: hidden;
-    width: 500px;
-    margin: auto;
-}
-
-#prompt-textarea {
-    max-height: 200px;
-    overflow-y: auto;
-    font-weight: 400;
-    font-size: 16px;
-    padding: 0;
-    resize: none;
-    border: none;
-    outline: none;
-    width: calc(100% - 40px);
-    box-sizing: border-box;
-    background-color: transparent;
+.left {
     float: left;
 }
 
-#prompt-submit {
-    border: 1px solid rgb(217, 217, 227);
-    border-radius: 5px;
-    background-color: #ccc;
-    float: right; /* 오른쪽으로 플로팅 */
+.right {
+    float: right;
 }
 
-.content {
-    /* text-align: center; */
+.inline-block {
+    display: inline-block;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.header {
+    width: 900px;
+    text-align: center;
+}
+
+.header-login, .header-regist {
+    margin: 0.5rem;
+}
+
+.header-logo {
+    font-size: 45px;
+    margin: 1rem;
+}
+
+.header .right {
+    font-size: 20px;
+    margin: 2rem;
+}
+
+
+
+.header .right {
+    display: none;
+}
+
+.sector {
+    width: var(--sector-width);
     margin: auto;
+    margin-top: 15rem;
+    margin-bottom: 15rem;
+}
+
+.sector-character {
+    width: var(--max-width);
+    margin: auto;
+}   
+
+.sector-character-converse {
+    margin: 4.5rem;
+    text-align: center;
+    position: relative;
+    font-size: 50px;
+    /* margin: auto; */
+}
+
+.sector-character-converse p{
+    margin: 1rem;
+}
+
+.sector-character-wrap-chest {
+    position: relative;
+}
+
+.sector-character-chestshot {
     width: 500px;
+    height: 500px;
+    background-image: url("https://cdn.discordapp.com/attachments/1166295276865208390/1177415855437525012/004.png?ex=65726cf7&is=655ff7f7&hm=ff4257a9fe2914f3d588cc3eccda01db05cdf8d9d7cb427e70d23a011433efca&");
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    border-radius: 100px;
 }
 
-.conversation {
-    margin-bottom: 2rem;
+.sector-download {
+    width: 333px;
+    height: 100px;
+    line-height: 100px;
+    font-size: 35px;
+    text-align: center;
+    font-weight: 700;
+    background-color: rgb(222,227,251);
+    border-radius: 5px;
+    margin: 10% 25%
 }
-.conversation > h1 {
-    font-weight: 500;
+.sector-character-wrap-full {
+    margin-left: 5rem;
+    height: 800px;
+    width: 600px;
+    border-radius: 9999px;
+    background-color: rgb(157,213,202);
+}
+
+.sector-character-fullshot {
+    height: 800px;
+    width: 600px;
+    background-image: url("https://cdn.discordapp.com/attachments/1166295276865208390/1177415854959366324/006.png?ex=65726cf7&is=655ff7f7&hm=855ca65cceb27763ee5e6a3fd78a1ec75af66a1193a00f9abd7b6cd4842f89a8&");
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    border-radius: 9999px;
+}
+
+.sector-character-about {
+    font-size: 4rem;
+    margin: 3rem;
+}
+
+.sector-character-attribute {
+    width: var(--max-width);
+}
+
+.sector-character-attribute .right {
+    margin: 3rem;
+}
+
+.sector-character-context {
+    font-size: 2rem;
+}
+
+.sector-chat-container {
+    background-color: rgb(222,227,251);
+    border-radius: 15px;
+    padding: 2em;
+    margin: auto;
+    height: 700px;
+    max-height: 700px;
+    overflow-y: auto;
+}
+
+.sector-chat-content-npc, .sector-chat-content-user {
+    margin: 2rem;
+}
+
+.sector-chat-content-npc {
+
+}
+.sector-chat-content-wrap-image {
+    height: 150px;
+    width: 150px;
+    background-color: white;
+    border-radius: 9999px;
+}
+
+.sector-chat-content-npc-shotimage {
+    border-radius: 9999px;
+    height: 150px;
+    width: 150px;
+    background-image: url("https://media.discordapp.net/attachments/1166295276865208390/1177415855735324742/image.png?ex=65726cf7&is=655ff7f7&hm=2153cfcf7dbba62879c1b93ee3095e000bd69751b2a0cfff2d92441ad3d90c68&=&format=webp");
+    background-size: cover;
+    background-position: center -10px; 
+    background-repeat: no-repeat;
+}
+
+.sector-chat-content-user {
+
+}
+.sector-chat-content-wrap-image {
+    height: 150px;
+    width: 150px;
+    background-color: white;
+    border-radius: 9999px;
+}
+
+.sector-chat-content-user-shotimage {
+    border-radius: 9999px;
+    height: 150px;
+    width: 150px;
+    background-image: url("https://media.discordapp.net/attachments/1166295276865208390/1177415855735324742/image.png?ex=65726cf7&is=655ff7f7&hm=2153cfcf7dbba62879c1b93ee3095e000bd69751b2a0cfff2d92441ad3d90c68&=&format=webp");
+    background-size: cover;
+    background-position: center -10px; 
+    background-repeat: no-repeat;
+}
+
+.sector-chat-content-npc-converse {
+    width: calc(100% - 250px);
+    float: right;
+}
+
+.converse-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin: 1rem;
     font-size: 30px;
-    margin-bottom: 1rem;
 }
 
-.npc {
-    text-align: left;
+.chat-input {
+    width: 95%;
+}
+.chat-input-text {
+    width: 100%;
+    background-color: white;
+    font-size: 5rem;
+    /* border: none;/ */
+    outline: none;
 }
 
-.user {
-    text-align: right;
-}
+input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 3rem;
+  }
+  
+  /* 포커스 스타일링 */
+  input:focus {
+    outline: none;
+    border-color: #5cb3fd; /* 포커스 시 색상 변경 */
+    box-shadow: 0 0 5px rgba(92, 179, 253, 0.5); /* 포커스 시 그림자 효과 */
+  }
+  
+  /* 호버 스타일링 */
+  input:hover {
+    border-color: #999; /* 호버 시 색상 변경 */
+  }
 
-@media (min-width: 800px) {
-    .top-fixed {
-        width: 800px;
+@media (min-width: 1400px) {
+    .header {
+        width: 1400px;
         margin: auto;
+        text-align: start;
+    }
+
+    .header-logo {
+        float: left;
+    }
+
+    .header .right {
+        display: inline-block;
     }
 }
