@@ -4,7 +4,7 @@ import openai
 import time
 import sys
 sys.path.insert(0, 'C:/FastAPI')
-openai.api_key = ''
+openai.api_key = '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'
 
 def temp_sleep(seconds=0.1):
   time.sleep(seconds)

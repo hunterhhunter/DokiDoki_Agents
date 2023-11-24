@@ -45,7 +45,7 @@ def agent_chat_v2(location, init_persona, target_persona):
   curr_chat = []
   print ("July 23")
 
-  for i in range(1): 
+  for i in range(5): 
     focal_points = [f"{target_persona.scratch.name}"]
     retrieved = new_retrieve(init_persona, focal_points, 50)
     relationship = generate_summarize_agent_relationship(init_persona, target_persona, retrieved)

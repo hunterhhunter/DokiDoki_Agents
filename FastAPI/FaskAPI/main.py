@@ -14,22 +14,34 @@ def read_results():
 
 @app.get('/gogo')
 def gogo():
-    return {"executions": [
+    return {
+  "executions": [
     {
       "Sub": "Emerald Puyor",
-      "P": "take",
-      "Obj": "inventory",
-      "location": "dokidoki village:Puyor's Store:supply store:pen",
-      "duration": 10,
-      "chat": None
+      "P": "chat with",
+      "Obj": "Franz Alez",
+      "location": "Franz Alez",
+      "duration": 2,
+      "chat": [
+        "Emerald Puyor",
+        " 안녕, Franz! \n낚시 대회 준비는 어떻게 진행되고 있는 것 같아?",
+        "Franz Alez",
+        " 안녕, Emerald! \n낚시 대회 준비는 잘 진행되고 있어. \n난 전단지를 붙이며 모두를 초대하고 있어.\n 너는 어때? \n너의 상점에서는 모든 게 어떻게 진행되고 있나?",
+        "Emerald Puyor",
+        "상점은 모든 게 맞아 떨어지지. \n너의 낚시 대회에 참가하려면 \n언제, 어디로 가야하니?",
+        "Franz Alez",
+        "듣던 중 반가운 말이군! \n내일 아침 10시에 마을의 강변에서\n 대회를 진행할 예정이야. \n내가 심사위원이지.",
+        "Franz Alez",
+        "오 좋은 아침이군! 영진 자네도 낚시 대회에 참여할 건가?"
+      ]
     },
     {
       "Sub": "Franz Alez",
-      "P": "make",
-      "Obj": "sure",
-      "location": "dokidoki village:Puyor's Store:supply store:pen",
-      "duration": 10,
-      "chat": [['Franz Alez', "Hey Emerald! How's your day going so far?"], ['Emerald Puyor', 'Hey Franz! My day is going well, thank you. How about you? Are you excited about the fishing tournament?']]
+      "P": "chat with",
+      "Obj": "Emerald Puyor",
+      "location": "Emerald Puyor",
+      "duration": 2,
+      "chat": None
     }
   ]
 }

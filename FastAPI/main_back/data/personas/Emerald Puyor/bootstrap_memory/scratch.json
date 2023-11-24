@@ -2,7 +2,7 @@
   "vision_r": 8,
   "att_bandwidth": 8,
   "retention": 8,
-  "curr_time": "February 14, 2023, 10:01:00",
+  "curr_time": "February 14, 2023, 10:16:00",
   "curr_tile": null,
   "daily_plan_req": "Emerald Puyor wake up at 7am everyday, and works at the counter until 7pm, at which point she closes the store.",
   "name": "Emerald Puyor",
@@ -25,8 +25,8 @@
   "importance_w": 1,
   "recency_decay": 0.995,
   "importance_trigger_max": 150,
-  "importance_trigger_curr": -18,
-  "importance_ele_n": 24,
+  "importance_trigger_curr": -32,
+  "importance_ele_n": 26,
   "thought_count": 5,
   "daily_req": [
     "wake up and complete the morning routine at 7:00 am",
@@ -156,8 +156,12 @@
       10
     ],
     [
-      "working at the counter in Puyor's Store (helping customers with questions)",
-      10
+      "working at the counter in Puyor's Store (on the way to helping customers with questions)",
+      0
+    ],
+    [
+      "working at the counter in Puyor's Store (conversing about Emerald and Franz are chatting about the preparation for the fishing tournament and how things are going at Puyor's Store.)",
+      2
     ],
     [
       "working at the counter in Puyor's Store (checking the store's security system)",
@@ -310,6 +314,14 @@
     [
       "sleeping",
       0
+    ],
+    [
+      "sleeping",
+      4
+    ],
+    [
+      "sleeping",
+      0
     ]
   ],
   "f_daily_schedule_hourly_org": [
@@ -343,9 +355,9 @@
     ]
   ],
   "act_address": "<persona> Franz Alez",
-  "act_start_time": "February 14, 2023, 10:01:00",
-  "act_duration": 1,
-  "act_description": "conversing about Franz Alez and Emerald Puyor are chatting about their day and the fishing tournament they are both excited about.",
+  "act_start_time": "February 14, 2023, 10:12:00",
+  "act_duration": 2,
+  "act_description": "conversing about Emerald and Franz are chatting about the preparation for the fishing tournament and how things are going at Puyor's Store.",
   "act_pronunciatio": "\ud83d\udcac",
   "act_event": [
     "Emerald Puyor",
@@ -362,16 +374,16 @@
   "chatting_with": "Franz Alez",
   "chat": [
     [
-      "Franz Alez",
-      "Hey Emerald! How's your day going so far?"
+      "Emerald Puyor",
+      "Good morning, Franz! How's the preparation for the fishing tournament going?"
     ],
     [
-      "Emerald Puyor",
-      "Hey Franz! My day is going well, thank you. How about you? Are you excited about the fishing tournament?"
+      "Franz Alez",
+      "Good morning, Emerald! The preparation for the fishing tournament is going well. I have been posting flyers and inviting everyone in town to participate. How about you? How is everything going at Puyor's Store?"
     ]
   ],
   "chatting_with_buffer": {},
-  "chatting_end_time": "February 14, 2023, 10:02:00",
+  "chatting_end_time": "February 14, 2023, 10:04:00",
   "act_path_set": false,
   "planned_path": []
 }
