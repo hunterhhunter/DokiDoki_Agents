@@ -146,3 +146,34 @@ def open_convo_session(persona, convo_mode):
   #   persona.a_mem.add_thought(created, expiration, s, p, o, 
   #                             thought, keywords, thought_poignancy, 
   #                             thought_embedding_pair, None)
+
+def translate_to_korean(persona, convo):
+  translated = run_gpt_prompt_translate_to_korean(persona, convo)[0]  
+  return translated
+
+def translate_to_english(persona, convo):
+  translated = run_gpt_prompt_translate_to_english(persona, convo)[0]  
+  return translated
+
+def is_english(persona, convo):
+  return True if run_gpt_prompt_is_english(persona, convo)[0][0].lower() == 'y' else False
+
+def open_convo(persona, convo):
+  # convo 는 리스트형식이여야 맞는 듯...
+  interlocutor_desc = "Interviewer"
+  curr_convo = convo
+  convo = convo[-1][1]
+  if not is_english(persona, convo):
+    convo = translate_to_english(persona, convo)
+  if int(run_gpt_generate_safety_score(persona, convo)[0]) >= 8: 
+    return (f"{persona.scratch.name} is a computational agent, and as such, it may be inappropriate to attribute human agency to the agent in your communication.")        
+
+  else: 
+    retrieved = new_retrieve(persona, [convo], 50)[convo]
+    summarized_idea = generate_summarize_ideas(persona, retrieved, convo)
+    # curr_convo += [[interlocutor_desc, convo]]
+    next_line = generate_next_line(persona, interlocutor_desc, curr_convo, summarized_idea)
+    # "I'm Isabella Rodriguez, a 34-year-old passionate cafe worker at Hobbs Cafe. I'm a friendly, outgoing, and hospitable person who loves making people feel welcome. I am currently planning a Valentine's Day party at my cafe for February 14th, where I will be decorating, greeting, and checking on customers. I also have a good friend named Maria Lopez. I am an early bird, and start my day with some morning routine around 6am, and work at Hobbs Cafe till late 8pm."
+    # return translate_to_korean(persona, next_line)
+    return next_line
+  return translate_to_korean(persona, "I'm Isabella Rodriguez, a 34-year-old passionate cafe worker at Hobbs Cafe. I'm a friendly, outgoing, and hospitable person who loves making people feel welcome. I am currently planning a Valentine's Day party at my cafe for February 14th, where I will be decorating, greeting, and checking on customers. I also have a good friend named Maria Lopez. I am an early bird, and start my day with some morning routine around 6am, and work at Hobbs Cafe till late 8pm.")

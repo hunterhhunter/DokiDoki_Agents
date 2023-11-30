@@ -1,0 +1,17 @@
+
+!<INPUT 0>! -- agent name
+!<INPUT 1>! -- agent iss
+!<INPUT 2>! -- conversation
+!<INPUT 3>! -- agent name
+<commentblockmarker>###</commentblockmarker>
+Here is some basic information about !<INPUT 0>!.
+!<INPUT 1>!
+
+=== 
+
+
+Please translate the following sentence into Korean according to the character's personality.
+!<INPUT 2>! 
+
+answer:
+!<INPUT 3>! : 

@@ -3,8 +3,7 @@ import random
 import openai
 import time
 
-openai.api_key = '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'
-
+openai.api_key = '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'
 def temp_sleep(seconds=0.1):
   time.sleep(seconds)
 
@@ -118,9 +117,9 @@ def ChatGPT_safe_generate_response(prompt,
   prompt += "Example output json:\n"
   prompt += '{"output": "' + str(example_output) + '"}'
 
-  if verbose: 
-    print ("CHAT GPT PROMPT")
-    print (prompt)
+  # if verbose: 
+  #   print ("CHAT GPT PROMPT")
+  #   print (prompt)
 
   for i in range(repeat): 
 
@@ -137,10 +136,10 @@ def ChatGPT_safe_generate_response(prompt,
       if func_validate(curr_gpt_response, prompt=prompt): 
         return func_clean_up(curr_gpt_response, prompt=prompt)
       
-      if verbose: 
-        print ("---- repeat count: \n", i, curr_gpt_response)
-        print (curr_gpt_response)
-        print ("~~~~")
+      # if verbose: 
+      #   print ("---- repeat count: \n", i, curr_gpt_response)
+      #   print (curr_gpt_response)
+      #   print ("~~~~")
 
     except: 
       pass
@@ -177,21 +176,34 @@ def ChatGPT_safe_generate_response_OLD(prompt,
                                    func_validate=None,
                                    func_clean_up=None,
                                    verbose=False): 
-  if verbose: 
-    print ("CHAT GPT PROMPT")
-    print (prompt)
+  # if verbose: 
+  #   print ("CHAT GPT PROMPT")
+  #   print (prompt)
 
   for i in range(repeat): 
     try: 
       curr_gpt_response = ChatGPT_request(prompt).strip()
       if func_validate(curr_gpt_response, prompt=prompt): 
         return func_clean_up(curr_gpt_response, prompt=prompt)
-      if verbose: 
-        print (f"---- repeat count: {i}")
-        print (curr_gpt_response)
-        print ("~~~~")
+      # if verbose: 
+      #   print (f"---- repeat count: {i}")
+      #   print (curr_gpt_response)
+      #   print ("~~~~")
 
     except: 
       pass
   print ("FAIL SAFE TRIGGERED") 
   return fail_safe_response
+
+
+def GPT_chat(instructions, prompt, assistant=None):
+    response = openai.ChatCompletion.create(
+        model="gpt-4-1106-preview",
+        messages=[
+            {"role": "system", "content": instructions},
+            {"role": "user", "content": prompt},
+            # {"role": "assistant", "content": assistant},
+        ]
+    )
+
+    return response['choices'][0]['message']['content'].strip()

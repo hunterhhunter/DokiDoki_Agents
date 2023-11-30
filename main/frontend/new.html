@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채팅 페이지</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+  .header {
+    background-color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .header-right {
+    position: absolute;
+    right: 20px; 
+  }
+  .login-button, .signup-button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #007aff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #fff;
+    margin-bottom: 20px;
+  }
+  .profile {
+    border-radius: 50%;
+    width: 150px;
+    margin-right: 20px;
+  }
+  .profile-info {
+    text-align: left;
+  }
+  .chat-interface {
+    padding: 20px;
+    background-color: #f0f0f0; 
+    border: solid 3px #007aff;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 50%;
+    margin: 0 auto;
+  }
+  .chat-bubble {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 20px;
+    display: block;
+    max-width: 70%;
+    margin: 10px;
+  }
+  .input-container {
+    padding: 20px;
+    background-color: #f0f0f0; 
+    width: 50%;
+    margin: 20px auto;
+    border: solid 3px #007aff;
+    border-radius: 10px;
+  }
+  .input-box {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+  }
+  .send-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .download-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 class="header-title">두겜부 캐릭터 챗봇</h1>
+  <div class="header-right">
+    <a class="login-button" href="#login">로그인</a>
+    <a class="signup-button" href="#signup">회원가입</a>
+  </div>
+</div>
+
+<div class="profile-container">
+  <img src="new_농부.png" alt="캐릭터 이미지" class="profile">
+  <div class="profile-info">
+    <p>안녕하신가?<br>당신도 내 마을에 떨어진 이방인인가?</p>
+    <a href="/path/to/downloadable_image.png" download="new_농부.png" class="download-btn">게임 앱 다운로드</a>
+  </div>
+</div>
+
+<div class="profile-container">
+  <img src="new_농부.png" alt="캐릭터 이미지" class="profile">
+  <div class="profile-info">
+    <h2>ABOUT HONALDU</h2>
+    <p>나이: 32<br>특징: 게임 속 캐릭터<br>취미: 자신이 키운 농작물을<br>마을 사람에게 나눠주기</p>
+    <!-- 다운로드 버튼 제거 -->
+  </div>
+</div>
+
+<div class="chat-interface" id="chat-interface">
+  <!-- 새 메시지가 여기에 추가됩니다 -->
+</div>
+
+<div class="input-container">
+  <input type="text" placeholder="메시지 입력..." class="input-box" id="chat-input">
+  <button class="send-btn" onclick="sendChat()">보내기</button>
+</div>
+
+<script>
+function sendChat() {
+  var chatInput = document.getElementById('chat-input');
+  var chatInterface = document.getElementById('chat-interface');
+  
+  if (chatInput.value.trim() === '') return;
+  
+  var newBubble = document.createElement('div');
+  newBubble.classList.add('chat-bubble');
+  newBubble.textContent = chatInput.value;
+  
+  chatInterface.appendChild(newBubble);                 // 새 메시지를 아래에 추가하도록 변경
+  chatInput.value = '';
+  chatInterface.scrollTop = chatInterface.scrollHeight; // 최신 메시지로 자동 스크롤
+}
+</script>
+
+</body>
+</html>

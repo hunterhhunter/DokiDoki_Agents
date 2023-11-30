@@ -1,0 +1,68 @@
+h2 {
+    font-size: 45px;
+}
+.header {
+    margin: 50px;
+}
+
+ul {
+    display: flex;
+    list-style: none;
+}
+
+li {
+    margin : 10px;
+}
+
+.feature-card {
+    height: 700px;
+    width: 500px;
+    background-color: rgba(222, 222, 0, 0.3);
+    border-radius: 30px;
+}
+
+.card {
+    /* height: 300px; */
+    /* background-color: blue; */
+}
+
+.calendar-header {
+    text-align: center;
+    margin-top: 0;
+}
+
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 450px;
+    text-align: center;
+    margin: auto;
+    font-weight: 600;
+}
+
+.calendar-box {
+    flex: 1 0 14.28%; /* 1 day of the week, 0 flex basis, 14.28% width */
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.calendar-top {
+    flex: 1 0 14.28%; /* 1 day of the week, 0 flex basis, 14.28% width */
+    padding: 15px;
+    box-sizing: border-box;
+    border-bottom: 2px solid black;
+
+}
+
+.day {
+    border-bottom: 1px dotted #ddd;
+}
+
+.day:nth-child(7n) {
+    /*border-right: none; /* No right border for the last day of each week */
+}
+
+.weekend {
+    /*background-color: #f2f2f2; /* Light background for weekend days */
+    color : red;
+}

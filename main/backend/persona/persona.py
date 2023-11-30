@@ -218,3 +218,6 @@ class Persona:
 
   def open_convo_session(self, convo_mode): 
     open_convo_session(self, convo_mode)
+
+  def open_convo(self, convo): 
+    return open_convo(self, convo)

@@ -1,0 +1,10 @@
+
+!<INPUT 0>! -- conversation
+!<INPUT 1>! -- agent name
+<commentblockmarker>###</commentblockmarker>
+
+Please translate the following sentence into English.
+!<INPUT 0>! 
+
+answer:
+!<INPUT 1>! : 

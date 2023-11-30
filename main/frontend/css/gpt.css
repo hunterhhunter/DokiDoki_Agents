@@ -1,0 +1,99 @@
+body {
+    font-family: Söhne, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.top-fixed {
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    position: sticky;
+    margin: auto;
+}
+
+.bottom-fixed {
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    background-color: rgba(255, 255, 255);
+    position: fixed;
+}
+
+#main-logo {
+    font-size: 18px;
+    font-weight: 500;
+    height: 50px;
+    line-height: 50px;
+    width: 200px;
+    text-align: center;
+    /* border: 1px solid black; */
+    background-color: white;
+}
+
+.prompt-form {
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    width: 100%;
+    margin: auto;
+}
+
+#prompt-textarea {
+    max-height: 200px;
+    overflow-y: auto;
+    font-weight: 400;
+    font-size: 16px;
+    padding: 0;
+    resize: none;
+    border: none;
+    outline: none;
+    width: calc(100% - 40px);
+    box-sizing: border-box;
+    background-color: transparent;
+    float: left;
+}
+
+#prompt-submit {
+    border: 1px solid rgb(217, 217, 227);
+    border-radius: 5px;
+    background-color: #ccc;
+    float: right; /* 오른쪽으로 플로팅 */
+}
+
+.content {
+    /* text-align: center; */
+    margin: auto;
+    width: 100%;
+}
+
+.conversation {
+    margin-bottom: 2rem;
+}
+.conversation > h1 {
+    font-weight: 500;
+    font-size: 30px;
+    margin-bottom: 1rem;
+}
+
+.npc {
+    text-align: left;
+}
+
+.user {
+    text-align: right;
+}
+
+@media (min-width: 600px) {
+    .prompt-form, .content {
+        width: 600px;
+        margin: auto;
+    }
+    
+}
+
+@media (min-width: 799px) {
+    .top-fixed {
+        width: 800px;
+        margin: auto;
+    }
+}
