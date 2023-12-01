@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, 'C:/FastAPI')
 import openai
-openai.api_key = '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'
+openai.api_key = ''
 
 from fastapi import APIRouter
 from main_back.backend.persona.personas import *
@@ -27,7 +27,7 @@ def start_test(time: str):
         ]
 
     executions = [] 
-
+    ls = []
     # ---- 초기화
     evc = EventChecker()
     _ = ['Emerald Puyor', 'Franz Alez']
@@ -78,49 +78,8 @@ def start_test(time: str):
         return_dict = {"Sub": execution[0][0], "P": execution[0][1], "Obj": execution[0][2], "location": execution[1][0], "duration": execution[2]}
 
         if persona.scratch.chat:
-            ls = list()
-            prompt = ''
-            prompt += 'You are a translator that can translate English into Korean, tailoring the tone of the conversation to match the personalities of the characters. For example, a conversation involving a man in his 40s might be translated with a tone like "~ 하겠군" while for a man in his 70s, it might be more appropriate to use a tone like "~하는구만.."'
-            for i in persona.scratch.chat:
-                print(type(i[0]))
-                per = personas[i[0]]
-                prompt += per.scratch.get_str_iss() + "\n\n"
-                prompt += 'Read the descriptions of the characters given above and translate the following conversation into Korean, matching their personalities" in English.\n----------------------------------------------------------\nconversation\n'
+            ls.append(persona.scratch.chat)
 
-            for name, text in persona.scratch.chat:
-                prompt += f'"{name}: {text}" \n'
-            prompt += 'output form(python string):\n"name(english): 대화내용"<spliter>\n"name(english): 대화내용"\n<spliter>"name(english): 대화내용"\n\nnegetive keyword: descriptions, comma in sentence'
-
-            completion = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[{"role": "assistant", "content": prompt}]
-            )
-
-            chatting = completion["choices"][0]["message"]["content"]
-            print(f'chatting: {chatting}')
-            if '<spliter>' in chatting:
-                cha_lis = chatting.split('<spliter>')
-                print(f'cha_lis: {cha_lis}')
-                for i in cha_lis:
-                    namesz = i.split(':')
-                    print(f'namesz {namesz}')
-                    names = namesz[0][1:]
-                    text1 = namesz[1][:-1]
-                    ls.append(names)
-                    ls.append(text1)
-
-            else:
-                cha_lis = chatting.split('\n')
-                print(f'cha_lis: {cha_lis}')
-                for i in cha_lis:
-                    namesz = i[0].split(':')
-                    print(f'names {namesz}')
-                    names = namesz[0][1:]
-                    text1 = namesz[1][:-1]
-                    ls.append(names)
-                    ls.append(text1)
-
-        print(f'ls: {ls}')
         if ls:
             return_dict['chat'] = ls
         else:

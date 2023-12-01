@@ -10,11 +10,12 @@ from main_back.backend.persona.cognitive_modules.retrieve import *
 from main_back.backend.persona.cognitive_modules.converse import *
 
 def generate_decide_to_react(init_persona, target_persona, retrieved): 
+
   # if debug: print ("GNS FUNCTION: <generate_decide_to_react>")
   return run_gpt_prompt_decide_to_react(init_persona, target_persona, retrieved)[0]
-
-
-def generate_new_decomp_schedule(persona, inserted_act, inserted_act_dur,  start_hour, end_hour): 
+def generate_new_decomp_schedule(persona, inserted_act, 
+inserted_act_dur,  start_hour, end_hour): 
+  
   # Step 1: Setting up the core variables for the function. 
   # <p> is the persona whose schedule we are editing right now. 
   p = persona
@@ -100,8 +101,8 @@ def generate_new_decomp_schedule(persona, inserted_act, inserted_act_dur,  start
                                             end_time_hour,
                                             inserted_act,
                                             inserted_act_dur)[0]
-
 def generate_convo(location, init_persona, target_persona): 
+
   # curr_loc = maze.access_tile(init_persona.scratch.curr_tile)
 
   # convo = run_gpt_prompt_create_conversation(init_persona, target_persona, curr_loc)[0]
@@ -118,8 +119,6 @@ def generate_convo(location, init_persona, target_persona):
 
   # if debug: print ("GNS FUNCTION: <generate_convo>")
   return convo, convo_length
-
-
 def generate_convo_summary(persona, convo): 
   convo_summary = run_gpt_prompt_summarize_conversation(persona, convo)[0]
   return convo_summary
@@ -222,7 +221,6 @@ def _chat_react(location, persona, focused_event, reaction_mode, personas):
       act_address, act_event, chatting_with, convo, chatting_with_buffer, chatting_end_time,
       act_pronunciatio, act_obj_description, act_obj_pronunciatio, 
       act_obj_event, act_start_time)
-
 
 def _wait_react(persona, reaction_mode): 
   p = persona

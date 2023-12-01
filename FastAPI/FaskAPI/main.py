@@ -31,8 +31,6 @@ def gogo():
         "상점은 모든 게 맞아 떨어지지. \n너의 낚시 대회에 참가하려면 \n언제, 어디로 가야하니?",
         "Franz Alez",
         "듣던 중 반가운 말이군! \n내일 아침 10시에 마을의 강변에서\n 대회를 진행할 예정이야. \n내가 심사위원이지.",
-        "Franz Alez",
-        "오 좋은 아침이군! 영진 자네도 낚시 대회에 참여할 건가?"
       ]
     },
     {
@@ -48,7 +46,7 @@ def gogo():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host='192.168.80.116', port=8000)
+    uvicorn.run(app, host='192.168.80.11', port=8000)
 
 # February 14, 2023, 00:00:00
 # February 14, 2023, 08:21:00

@@ -67,10 +67,10 @@ def perceive(persona, accepted, event_checker):
       input : "Here is a brief description of Maria Lopez. \nName: Maria Lopez\nAge: 21\nInnate traits: energetic, enthusiastic, inquisitive\nLearned traits: Maria Lopez is a student at Oak Hill College studying physics and a part time Twitch game streamer who loves to connect with people and explore new ideas.\nCurrently: Maria Lopez is working on her physics degree and streaming games on Twitch to make some extra money. She visits Hobbs Cafe for studying and eating just about everyday.\nLifestyle: Maria Lopez goes to bed around 2am, awakes up around 9am, eats dinner around 6pm. She likes to hang out at Hobbs Cafe if it's before 6pm.\nDaily plan requirement: Maria Lopez spends at least 3 hours a day Twitch streaming or gaming.\nCurrent Date: Monday February 13\n\n\nOn the scale of 1 to 10, where 1 is purely mundane (e.g., brushing teeth, making bed) and 10 is extremely poignant (e.g., a break up, college acceptance), rate the likely poignancy of the following event for Maria Lopez.\n\nEvent: Klaus Mueller is taking a break\nRate (return a number between 1 to 10):"
       output : 7
       '''
-      #event_poignancy = generate_poig_score(persona, 
-      #                                      "event", 
-      #                                      desc_embedding_in)
-      event_poignancy = 7
+      event_poignancy = generate_poig_score(persona, 
+                                           "event", 
+                                           desc_embedding_in)
+      # event_poignancy = 7
       # If we observe the persona's self chat, we include that in the memory
       # of the persona here. 
       chat_node_ids = []
